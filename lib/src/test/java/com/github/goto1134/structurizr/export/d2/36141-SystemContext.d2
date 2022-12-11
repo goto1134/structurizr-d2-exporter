@@ -1,0 +1,81 @@
+container_1: {
+  label: "Personal Banking Customer\n[Person]"
+  shape: person
+  style: {
+    fill: "#08427b"
+    font-color: "#ffffff"
+    font-size: 22
+    multiple: false
+    opacity: 1.0
+    stroke: "#052e56"
+  }
+}
+container_2: {
+  label: "Internet Banking System\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#1168bd"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#0b4884"
+  }
+}
+container_4: {
+  label: "Mainframe Banking System\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#999999"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#6b6b6b"
+  }
+}
+container_6: {
+  label: "E-mail System\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#999999"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#6b6b6b"
+  }
+}
+
+container_1 -> container_2: {
+  label: "Views account balances, and makes payments using"
+  style: {
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-width: 2
+  }
+}
+container_2 -> container_4: {
+  label: "Gets account information from, and makes payments using"
+  style: {
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-width: 2
+  }
+}
+container_2 -> container_6: {
+  label: "Sends e-mail using"
+  style: {
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-width: 2
+  }
+}
+container_6 -> container_1: {
+  label: "Sends e-mails to"
+  style: {
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-width: 2
+  }
+}
