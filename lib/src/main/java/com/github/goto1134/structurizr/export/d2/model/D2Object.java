@@ -5,10 +5,12 @@ import com.structurizr.export.IndentingWriter;
 import java.util.*;
 
 public class D2Object {
+
     public static class Builder {
 
         public static final int STROKE_DASHED = 5;
         public static final int STROKE_DOTTED = 2;
+
         private final String name;
         private List<D2Property<D2Keyword, ?>> properties = new ArrayList<>();
         private List<D2Property<D2StyleKeyword, ?>> style = new ArrayList<>();
@@ -106,7 +108,6 @@ public class D2Object {
     public static Builder builder(String name) {
         return new Builder(name);
     }
-
 
     private final String name;
     private final List<D2Property<D2Keyword, ?>> properties;

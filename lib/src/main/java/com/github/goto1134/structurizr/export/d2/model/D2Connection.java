@@ -6,10 +6,12 @@ package com.github.goto1134.structurizr.export.d2.model;
  * @see <a href="https://d2lang.com/tour/connections">D2 Connections</a>
  */
 public enum D2Connection {
+
     WITHOUT_DIRECTION("--"),
     DIRECT("->"),
     REVERSE("<-"),
     BIDIRECTIONAL("<->>");
+
     private final String value;
 
     D2Connection(String value) {
