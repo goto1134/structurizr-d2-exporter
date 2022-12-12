@@ -1,11 +1,11 @@
-package com.github.goto1134.structurizr.export.d2;
+package io.github.goto1134.structurizr.export.d2;
 
-import com.github.goto1134.structurizr.export.d2.model.*;
 import com.structurizr.export.AbstractDiagramExporter;
 import com.structurizr.export.Diagram;
 import com.structurizr.export.IndentingWriter;
 import com.structurizr.model.*;
 import com.structurizr.view.*;
+import io.github.goto1134.structurizr.export.d2.model.*;
 
 import java.util.Deque;
 import java.util.LinkedList;
