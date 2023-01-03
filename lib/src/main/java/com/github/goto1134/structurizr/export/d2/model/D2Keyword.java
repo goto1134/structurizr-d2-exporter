@@ -4,6 +4,7 @@ package com.github.goto1134.structurizr.export.d2.model;
  * D2 object keyword
  */
 public enum D2Keyword {
+
     LABEL("label"),
     /**
      * {@link D2Shape}
@@ -27,6 +28,7 @@ public enum D2Keyword {
      * {@link D2Direction}
      */
     DIRECTION("direction");
+
     private final String name;
 
     D2Keyword(String name) {

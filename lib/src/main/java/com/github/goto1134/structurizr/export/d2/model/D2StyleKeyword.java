@@ -21,8 +21,9 @@ public enum D2StyleKeyword {
     SHAPE_MULTIPLE("multiple"),
     SQUARE_IS_3D("3d"),
 
-    EDGE_ANIMATED("animated"),
-    EDGE_FILLED("filled");
+    CONNECTION_ANIMATED("animated"),
+    CONNECTION_FILLED("filled");
+
     private final String name;
 
     D2StyleKeyword(String name) {

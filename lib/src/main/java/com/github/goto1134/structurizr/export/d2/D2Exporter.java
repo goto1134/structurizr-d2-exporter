@@ -15,9 +15,7 @@ import java.util.stream.Collectors;
 
 public class D2Exporter extends AbstractDiagramExporter {
 
-
     public static final String D2_IGNORE_RELATION_FONT_SIZE = "d2.ignore_relation_font_size";
-
 
     @Override
     protected void writeHeader(View view, IndentingWriter writer) {
@@ -107,7 +105,6 @@ public class D2Exporter extends AbstractDiagramExporter {
     protected void writeElement(View view, Element element, IndentingWriter writer) {
         getD2Object(view, element).writeObject(writer);
     }
-
 
     @Override
     protected void writeRelationship(View view, RelationshipView relationshipView, IndentingWriter writer) {
@@ -286,7 +283,6 @@ public class D2Exporter extends AbstractDiagramExporter {
     }
 
     private String typeOf(View view, Relationship relationship) {
-
         String typeOf;
         if (hasValue(relationship.getTechnology())) {
             if (relationship.getInteractionStyle() == InteractionStyle.Asynchronous) {
