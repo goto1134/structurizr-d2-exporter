@@ -1,0 +1,73 @@
+direction: down
+container_3: {
+  label: "C\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+
+container_4: {
+  label: "D\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+  "group_Group 3": {
+    label: "Group 3"
+    style: {
+      fill: "white"
+      stroke: "black"
+    }
+    container_6: {
+      label: "F\n[Container]"
+      shape: rectangle
+      style: {
+        fill: "#dddddd"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#9a9a9a"
+      }
+    }
+  }
+  container_5: {
+    label: "E\n[Container]"
+    shape: rectangle
+    style: {
+      fill: "#dddddd"
+      font-color: "#000000"
+      font-size: 24
+      multiple: false
+      opacity: 1.0
+      stroke: "#9a9a9a"
+    }
+  }
+}
+container_3 -> container_4.container_5: {
+  label: ""
+  style: {
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-width: 2
+  }
+}
+container_3 -> container_4."group_Group 3".container_6: {
+  label: ""
+  style: {
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-width: 2
+  }
+}
