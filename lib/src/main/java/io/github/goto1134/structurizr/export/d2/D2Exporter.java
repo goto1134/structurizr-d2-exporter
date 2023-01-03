@@ -261,7 +261,7 @@ public class D2Exporter extends AbstractDiagramExporter {
     private String getLabel(View view, Element element) {
         String typeOf = typeOf(view, element, true);
         if (hasValue(typeOf)) {
-            return String.format("%s%n%s", element.getName(), typeOf);
+            return String.format("%s\n%s", element.getName(), typeOf);
         }
         return element.getName();
     }
@@ -277,7 +277,7 @@ public class D2Exporter extends AbstractDiagramExporter {
         Relationship relationship = relationshipView.getRelationship();
         String typeOf = typeOf(view, relationship);
         if (hasValue(typeOf)) {
-            return String.format("%s%n%s", relationship.getDescription(), typeOf);
+            return String.format("%s\n%s", relationship.getDescription(), typeOf);
         }
         return relationship.getDescription();
     }
