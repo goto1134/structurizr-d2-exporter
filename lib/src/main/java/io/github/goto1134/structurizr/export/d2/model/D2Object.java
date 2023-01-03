@@ -1,4 +1,4 @@
-package com.github.goto1134.structurizr.export.d2.model;
+package io.github.goto1134.structurizr.export.d2.model;
 
 import com.structurizr.export.IndentingWriter;
 
@@ -12,8 +12,8 @@ public class D2Object {
         public static final int STROKE_DOTTED = 2;
 
         private final String name;
-        private List<D2Property<D2Keyword, ?>> properties = new ArrayList<>();
-        private List<D2Property<D2StyleKeyword, ?>> style = new ArrayList<>();
+        private final List<D2Property<D2Keyword, ?>> properties = new ArrayList<>();
+        private final List<D2Property<D2StyleKeyword, ?>> style = new ArrayList<>();
 
         public Builder(String name) {
             this.name = name;

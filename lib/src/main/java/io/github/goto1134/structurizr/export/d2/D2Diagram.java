@@ -1,4 +1,4 @@
-package com.github.goto1134.structurizr.export.d2;
+package io.github.goto1134.structurizr.export.d2;
 
 import com.structurizr.export.Diagram;
 import com.structurizr.view.View;

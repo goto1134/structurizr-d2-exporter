@@ -1,4 +1,4 @@
-package com.github.goto1134.structurizr.export.d2.model;
+package io.github.goto1134.structurizr.export.d2.model;
 
 import com.structurizr.export.IndentingWriter;
 

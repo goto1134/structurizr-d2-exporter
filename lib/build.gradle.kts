@@ -1,5 +1,3 @@
-import com.github.spotbugs.snom.SpotBugsTask
-
 plugins {
     `java-library`
     `maven-publish`
@@ -10,7 +8,7 @@ plugins {
 
 description = "Exports Structurizr models and views to D2 format"
 group = "io.github.goto1134"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.1-SNAPSHOT"
 
 gitVersioning.apply {
     refs {

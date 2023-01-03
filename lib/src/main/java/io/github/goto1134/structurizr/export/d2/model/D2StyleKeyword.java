@@ -1,4 +1,4 @@
-package com.github.goto1134.structurizr.export.d2.model;
+package io.github.goto1134.structurizr.export.d2.model;
 
 /**
  * @see <a href="https://d2lang.com/tour/style">D2 Style</a>

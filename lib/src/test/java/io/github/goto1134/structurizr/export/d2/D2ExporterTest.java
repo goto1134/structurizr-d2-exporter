@@ -1,4 +1,4 @@
-package com.github.goto1134.structurizr.export.d2;
+package io.github.goto1134.structurizr.export.d2;
 
 import com.structurizr.Workspace;
 import com.structurizr.export.Diagram;
@@ -25,31 +25,31 @@ class D2ExporterTest {
         assertEquals(7, diagrams.size());
 
         Diagram diagram = diagrams.stream().filter(md -> md.getKey().equals("SystemLandscape")).findFirst().get();
-        String expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/36141-SystemLandscape.d2"));
+        String expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/36141-SystemLandscape.d2"));
         assertEquals(expected, diagram.getDefinition());
 
         diagram = diagrams.stream().filter(md -> md.getKey().equals("SystemContext")).findFirst().get();
-        expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/36141-SystemContext.d2"));
+        expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/36141-SystemContext.d2"));
         assertEquals(expected, diagram.getDefinition());
 
         diagram = diagrams.stream().filter(md -> md.getKey().equals("Containers")).findFirst().get();
-        expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/36141-Containers.d2"));
+        expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/36141-Containers.d2"));
         assertEquals(expected, diagram.getDefinition());
 
         diagram = diagrams.stream().filter(md -> md.getKey().equals("Components")).findFirst().get();
-        expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/36141-Components.d2"));
+        expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/36141-Components.d2"));
         assertEquals(expected, diagram.getDefinition());
 
         diagram = diagrams.stream().filter(md -> md.getKey().equals("SignIn")).findFirst().get();
-        expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/36141-SignIn.d2"));
+        expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/36141-SignIn.d2"));
         assertEquals(expected, diagram.getDefinition());
 
         diagram = diagrams.stream().filter(md -> md.getKey().equals("DevelopmentDeployment")).findFirst().get();
-        expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/36141-DevelopmentDeployment.d2"));
+        expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/36141-DevelopmentDeployment.d2"));
         assertEquals(expected, diagram.getDefinition());
 
         diagram = diagrams.stream().filter(md -> md.getKey().equals("LiveDeployment")).findFirst().get();
-        expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/36141-LiveDeployment.d2"));
+        expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/36141-LiveDeployment.d2"));
         assertEquals(expected, diagram.getDefinition());
     }
 
@@ -64,7 +64,7 @@ class D2ExporterTest {
         assertEquals(1, diagrams.size());
 
         Diagram diagram = diagrams.stream().findFirst().get();
-        String expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/54915-AmazonWebServicesDeployment.d2"));
+        String expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/54915-AmazonWebServicesDeployment.d2"));
         assertEquals(expected, diagram.getDefinition());
     }
 
@@ -78,15 +78,15 @@ class D2ExporterTest {
         assertEquals(3, diagrams.size());
 
         Diagram diagram = diagrams.stream().filter(md -> md.getKey().equals("SystemLandscape")).findFirst().get();
-        String expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/groups-SystemLandscape.d2"));
+        String expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/groups-SystemLandscape.d2"));
         assertEquals(expected, diagram.getDefinition());
 
         diagram = diagrams.stream().filter(md -> md.getKey().equals("Containers")).findFirst().get();
-        expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/groups-Containers.d2"));
+        expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/groups-Containers.d2"));
         assertEquals(expected, diagram.getDefinition());
 
         diagram = diagrams.stream().filter(md -> md.getKey().equals("Components")).findFirst().get();
-        expected = readFile(new File("./src/test/java/com/github/goto1134/structurizr/export/d2/groups-Components.d2"));
+        expected = readFile(new File("./src/test/java/io/github/goto1134/structurizr/export/d2/groups-Components.d2"));
         assertEquals(expected, diagram.getDefinition());
     }
 
