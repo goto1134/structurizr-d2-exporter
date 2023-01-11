@@ -113,3 +113,11 @@ signing {
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign(publishing.publications)
 }
+
+spotbugs {
+    omitVisitors.set(listOf(
+        // This project forces \n instead of system-specific line separators
+        // https://spotbugs.readthedocs.io/en/stable/detectors.html#formatstringchecker
+        "FormatStringChecker"
+    ))
+}
