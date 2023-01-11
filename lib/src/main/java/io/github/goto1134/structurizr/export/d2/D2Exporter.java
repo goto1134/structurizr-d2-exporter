@@ -4,21 +4,28 @@ import com.structurizr.export.AbstractDiagramExporter;
 import com.structurizr.export.Diagram;
 import com.structurizr.export.IndentingWriter;
 import com.structurizr.model.*;
+import com.structurizr.util.StringUtils;
 import com.structurizr.view.*;
 import io.github.goto1134.structurizr.export.d2.model.*;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 public class D2Exporter extends AbstractDiagramExporter {
 
     public static final String D2_IGNORE_RELATION_FONT_SIZE = "d2.ignore_relation_font_size";
+    public static final String D2_TITLE_POSITION = "d2.title_position";
 
     @Override
     protected void writeHeader(View view, IndentingWriter writer) {
+        String title = getTitleString(view);
+        String titlePosition = view.getProperties().getOrDefault(D2_TITLE_POSITION, D2NearConstant.TOP_CENTER.toString());
+        D2TextObject.builder("title", "md", String.format("# %s", title))
+                .near(titlePosition)
+                .build()
+                .writeObject(writer);
+
         Optional.ofNullable(view.getAutomaticLayout())
                 .map(AutomaticLayout::getRankDirection)
                 .map(it -> {
@@ -37,6 +44,14 @@ public class D2Exporter extends AbstractDiagramExporter {
                 })
                 .map(it -> new D2Property<>(D2Keyword.DIRECTION, it))
                 .ifPresent(it -> it.write(writer));
+    }
+
+    private String getTitleString(View view) {
+        String title = view.getTitle();
+        if (StringUtils.isNullOrEmpty(title)) {
+            title = view.getName();
+        }
+        return title;
     }
 
     @Override

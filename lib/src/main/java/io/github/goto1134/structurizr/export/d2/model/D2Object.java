@@ -41,6 +41,11 @@ public class D2Object {
             return this;
         }
 
+        public Builder tooltip(String tooltip) {
+            properties.add(new D2WrappedStringProperty<>(D2Keyword.TOOLTIP, tooltip));
+            return this;
+        }
+
         public Builder fill(String fill) {
             style.add(new D2WrappedStringProperty<>(D2StyleKeyword.FILL_COLOR, fill));
             return this;
@@ -109,9 +114,9 @@ public class D2Object {
         return new Builder(name);
     }
 
-    private final String name;
-    private final List<D2Property<D2Keyword, ?>> properties;
-    private final List<D2Property<D2StyleKeyword, ?>> style;
+    protected final String name;
+    protected final List<D2Property<D2Keyword, ?>> properties;
+    protected final List<D2Property<D2StyleKeyword, ?>> style;
 
     public D2Object(String name, List<D2Property<D2Keyword, ?>> properties, List<D2Property<D2StyleKeyword, ?>> style) {
         this.name = name;
@@ -120,8 +125,16 @@ public class D2Object {
     }
 
     public void startObject(IndentingWriter writer) {
+        writeHeader(writer);
+        writeProperties(writer);
+    }
+
+    public void writeHeader(IndentingWriter writer) {
         writer.writeLine(String.format("%s: {", name));
         writer.indent();
+    }
+
+    private void writeProperties(IndentingWriter writer) {
         properties.stream().sorted(Comparator.comparing(it -> it.getKeyword().toString())).forEach(p -> p.write(writer));
         writer.writeLine(String.format("%s: {", D2Keyword.STYLE));
         writer.indent();
