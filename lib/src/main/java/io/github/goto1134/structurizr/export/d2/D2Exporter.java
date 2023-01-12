@@ -167,6 +167,10 @@ public class D2Exporter extends AbstractDiagramExporter {
                 .shape(d2ShapeOf(elementStyle))
                 .icon(Optional.ofNullable(elementStyle.getIcon()))
                 .link(Optional.ofNullable(element.getUrl()))
+                .tooltip(
+                        Optional.ofNullable(element.getDescription())
+                                .filter(it -> Optional.ofNullable(elementStyle.getDescription()).orElse(true))
+                )
                 .fill(elementStyle.getBackground())
                 .stroke(elementStyle.getStroke())
 

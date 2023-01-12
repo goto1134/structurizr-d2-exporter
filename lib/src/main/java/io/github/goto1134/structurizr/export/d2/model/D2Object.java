@@ -41,8 +41,9 @@ public class D2Object {
             return this;
         }
 
-        public Builder tooltip(String tooltip) {
-            properties.add(new D2WrappedStringProperty<>(D2Keyword.TOOLTIP, tooltip));
+        public Builder tooltip(Optional<String> tooltip) {
+            tooltip.filter(it-> !it.isEmpty())
+                            .ifPresent(it-> properties.add(new D2WrappedStringProperty<>(D2Keyword.TOOLTIP, it)));
             return this;
         }
 
