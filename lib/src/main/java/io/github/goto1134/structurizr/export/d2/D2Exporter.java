@@ -187,7 +187,7 @@ public class D2Exporter extends AbstractDiagramExporter {
                 break;
         }
         return builder
-                .multiple(element instanceof DeploymentNode && ((DeploymentNode) element).getInstances() > 1)
+                .multiple(element instanceof DeploymentNode && !"1".equals(((DeploymentNode) element).getInstances()))
                 .fontColor(elementStyle.getColor())
                 .fontSize(elementStyle.getFontSize())
                 .build();
