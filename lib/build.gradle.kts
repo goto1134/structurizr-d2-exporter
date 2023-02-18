@@ -25,7 +25,6 @@ repositories {
 
 dependencies {
     implementation(libs.structurizr.export)
-    implementation(libs.structurizr.core)
     testImplementation(libs.structurizr.client)
     testImplementation(libs.junit.jupyter)
 }

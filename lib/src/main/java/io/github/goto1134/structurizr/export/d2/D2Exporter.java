@@ -18,7 +18,7 @@ public class D2Exporter extends AbstractDiagramExporter {
     public static final String D2_TITLE_POSITION = "d2.title_position";
 
     @Override
-    protected void writeHeader(View view, IndentingWriter writer) {
+    protected void writeHeader(ModelView view, IndentingWriter writer) {
         String title = getTitleString(view);
         String titlePosition = view.getProperties().getOrDefault(D2_TITLE_POSITION, D2NearConstant.TOP_CENTER.toString());
         D2TextObject.builder("title", "md", String.format("# %s", title))
@@ -55,11 +55,11 @@ public class D2Exporter extends AbstractDiagramExporter {
     }
 
     @Override
-    protected void writeFooter(View view, IndentingWriter writer) {
+    protected void writeFooter(ModelView view, IndentingWriter writer) {
     }
 
     @Override
-    protected void startEnterpriseBoundary(View view, String enterpriseName, IndentingWriter writer) {
+    protected void startEnterpriseBoundary(ModelView view, String enterpriseName, IndentingWriter writer) {
         D2Object.builder(enterpriseId(enterpriseName))
                 .label(enterpriseName)
                 .withGroupStyle()
@@ -68,12 +68,12 @@ public class D2Exporter extends AbstractDiagramExporter {
     }
 
     @Override
-    protected void endEnterpriseBoundary(View view, IndentingWriter writer) {
+    protected void endEnterpriseBoundary(ModelView view, IndentingWriter writer) {
         D2Object.endObject(writer);
     }
 
     @Override
-    protected void startGroupBoundary(View view, String group, IndentingWriter writer) {
+    protected void startGroupBoundary(ModelView view, String group, IndentingWriter writer) {
         D2Object.builder(groupId(group))
                 .label(group)
                 .withGroupStyle()
@@ -82,27 +82,27 @@ public class D2Exporter extends AbstractDiagramExporter {
     }
 
     @Override
-    protected void endGroupBoundary(View view, IndentingWriter writer) {
+    protected void endGroupBoundary(ModelView view, IndentingWriter writer) {
         D2Object.endObject(writer);
     }
 
     @Override
-    protected void startSoftwareSystemBoundary(View view, SoftwareSystem softwareSystem, IndentingWriter writer) {
+    protected void startSoftwareSystemBoundary(ModelView view, SoftwareSystem softwareSystem, IndentingWriter writer) {
         getD2Object(view, softwareSystem).startObject(writer);
     }
 
     @Override
-    protected void endSoftwareSystemBoundary(View view, IndentingWriter writer) {
+    protected void endSoftwareSystemBoundary(ModelView view, IndentingWriter writer) {
         D2Object.endObject(writer);
     }
 
     @Override
-    protected void startContainerBoundary(View view, Container container, IndentingWriter writer) {
+    protected void startContainerBoundary(ModelView view, Container container, IndentingWriter writer) {
         getD2Object(view, container).startObject(writer);
     }
 
     @Override
-    protected void endContainerBoundary(View view, IndentingWriter writer) {
+    protected void endContainerBoundary(ModelView view, IndentingWriter writer) {
         D2Object.endObject(writer);
     }
 
@@ -112,17 +112,17 @@ public class D2Exporter extends AbstractDiagramExporter {
     }
 
     @Override
-    protected void endDeploymentNodeBoundary(View view, IndentingWriter writer) {
+    protected void endDeploymentNodeBoundary(ModelView view, IndentingWriter writer) {
         D2Object.endObject(writer);
     }
 
     @Override
-    protected void writeElement(View view, Element element, IndentingWriter writer) {
+    protected void writeElement(ModelView view, Element element, IndentingWriter writer) {
         getD2Object(view, element).writeObject(writer);
     }
 
     @Override
-    protected void writeRelationship(View view, RelationshipView relationshipView, IndentingWriter writer) {
+    protected void writeRelationship(ModelView view, RelationshipView relationshipView, IndentingWriter writer) {
         Relationship relationship = relationshipView.getRelationship();
         RelationshipStyle relationshipStyle = findRelationshipStyle(view, relationshipView.getRelationship());
 
@@ -155,12 +155,12 @@ public class D2Exporter extends AbstractDiagramExporter {
     }
 
     @Override
-    protected Diagram createDiagram(View view, String definition) {
+    protected Diagram createDiagram(ModelView view, String definition) {
         return new D2Diagram(view, definition);
     }
 
 
-    private D2Object getD2Object(View view, Element element) {
+    private D2Object getD2Object(ModelView view, Element element) {
         ElementStyle elementStyle = findElementStyle(view, element);
         D2Object.Builder builder = D2Object.builder(idWithPrefix(element))
                 .label(getLabel(view, element))
@@ -221,7 +221,7 @@ public class D2Exporter extends AbstractDiagramExporter {
         }
     }
 
-    private String getAbsolutePath(View view, Element element) {
+    private String getAbsolutePath(ModelView view, Element element) {
         Deque<Element> pathFromParent = new LinkedList<>();
         do {
             pathFromParent.addFirst(element);
@@ -238,7 +238,7 @@ public class D2Exporter extends AbstractDiagramExporter {
         return pathFromParent.stream().map(it -> view.isElementInView(it) ? idWithGroupAndPrefix(it) : idWithPrefix(it.getId())).collect(Collectors.joining(".", enterprisePrefix, ""));
     }
 
-    private String getEnterprisePrefix(View view, Element parent) {
+    private String getEnterprisePrefix(ModelView view, Element parent) {
         boolean enterpriseBoundaryVisible =
                 (view instanceof SystemLandscapeView && ((SystemLandscapeView) view).isEnterpriseBoundaryVisible())
                         || (view instanceof SystemContextView && ((SystemContextView) view).isEnterpriseBoundaryVisible());
@@ -277,7 +277,7 @@ public class D2Exporter extends AbstractDiagramExporter {
         return String.format("\"enterprise_%s\"", enterpriseName);
     }
 
-    private String getLabel(View view, Element element) {
+    private String getLabel(ModelView view, Element element) {
         String typeOf = typeOf(view, element, true);
         if (hasValue(typeOf)) {
             return String.format("%s\n%s", element.getName(), typeOf);
