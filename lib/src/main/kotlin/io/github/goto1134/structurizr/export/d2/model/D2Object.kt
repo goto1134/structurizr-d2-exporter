@@ -10,7 +10,7 @@ open class D2Object(
 ) {
 
     companion object {
-        fun build(name: String, block: Builder.() -> Unit): D2Object {
+        fun build(name: String, block: Builder.() -> Unit = {}): D2Object {
             return Builder(name).apply(block).build()
         }
     }
@@ -21,11 +21,13 @@ open class D2Object(
 
     private fun writeProperties(writer: IndentingWriter) {
         properties.write(writer)
-        writer.writeLine("${D2Keyword.STYLE}: {")
-        writer.indented {
-            style.write(writer)
+        if (style.isNotEmpty()) {
+            writer.writeLine("${D2Keyword.STYLE}: {")
+            writer.indented {
+                style.write(writer)
+            }
+            writer.writeLine("}")
         }
-        writer.writeLine("}")
     }
 
     private fun List<D2Property<*, *>>.write(writer: IndentingWriter) {
@@ -34,10 +36,11 @@ open class D2Object(
         }
     }
 
-    fun writeObject(writer: IndentingWriter) {
+    fun writeObject(writer: IndentingWriter, block: () -> Unit = { }) {
         openObject(writer)
         writer.indented {
             writeProperties(writer)
+            block()
         }
         writer.writeLine("}")
     }
