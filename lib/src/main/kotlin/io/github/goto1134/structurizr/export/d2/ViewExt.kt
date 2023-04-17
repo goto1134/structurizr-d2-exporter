@@ -11,6 +11,12 @@ val View.d2Title: String
 val View.d2TitlePosition: D2NearConstant
     get() = D2NearConstant.getOrDefault(properties[D2Exporter.D2_TITLE_POSITION], D2NearConstant.TOP_CENTER)
 
+val View.animationType: AnimationType
+    get() = AnimationType.getOrDefault(properties[D2Exporter.D2_ANIMATION], AnimationType.D2)
+
+val View.includeSoftwareSystemBoundaries
+    get() = properties[D2Exporter.STRUCTURIZR_INCLUDE_SOFTWARE_SYSTEM_BOUNDARIES].toBoolean()
+
 fun AutomaticLayout.getD2Direction(): D2Direction? {
     return when (this.rankDirection) {
         AutomaticLayout.RankDirection.TopBottom -> D2Direction.TOP_TO_BOTTOM

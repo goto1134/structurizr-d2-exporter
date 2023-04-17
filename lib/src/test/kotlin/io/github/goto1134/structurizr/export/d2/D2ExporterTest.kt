@@ -18,12 +18,26 @@ internal class D2ExporterTest {
     @Test
     fun test_BigBankPlcExample() {
         val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("structurizr-36141-workspace.json"))
+        workspace.views.views.forEach { it.addProperty(D2Exporter.D2_ANIMATION, AnimationType.FRAMES.name) }
         val diagrams = D2Exporter().export(workspace)
         assertEquals(7, diagrams.size)
-
         assertAll("BigBankPlc", diagrams.map {
             {
-                val fileName = "36141-${it.key}.d2"
+                val fileName = "bank/${it.key}.d2"
+                assertEquals(testFileText(fileName), it.definition, "${it.key} diagram does not match $fileName")
+            }
+        })
+    }
+
+    @Test
+    fun test_Animated_BigBankPlcExample() {
+        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("structurizr-36141-workspace.json"))
+        workspace.views.views.forEach { it.addProperty(D2Exporter.D2_ANIMATION, AnimationType.D2.name) }
+        val diagrams = D2Exporter().export(workspace)
+        assertEquals(7, diagrams.size)
+        assertAll("BigBankPlc", diagrams.filter { it.key != "SignIn" }.map {
+            {
+                val fileName = "bank-animated/${it.key}.d2"
                 assertEquals(testFileText(fileName), it.definition, "${it.key} diagram does not match $fileName")
             }
         })
@@ -33,10 +47,26 @@ internal class D2ExporterTest {
     fun test_AmazonWebServicesExample() {
         val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("structurizr-54915-workspace.json"))
         ThemeUtils.loadThemes(workspace)
-        workspace.views.deploymentViews.first().enableAutomaticLayout(AutomaticLayout.RankDirection.LeftRight, 300, 300)
+        workspace.views.deploymentViews.first().apply {
+            enableAutomaticLayout(AutomaticLayout.RankDirection.LeftRight, 300, 300)
+            addProperty(D2Exporter.D2_ANIMATION, AnimationType.FRAMES.name)
+        }
         val diagrams = D2Exporter().export(workspace)
         assertEquals(1, diagrams.size)
-        assertEquals(testFileText("54915-AmazonWebServicesDeployment.d2"), diagrams.first().definition)
+        assertEquals(testFileText("amazon/AmazonWebServicesDeployment.d2"), diagrams.first().definition)
+    }
+
+    @Test
+    fun test_Animated_AmazonWebServicesExample() {
+        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("structurizr-54915-workspace.json"))
+        ThemeUtils.loadThemes(workspace)
+        workspace.views.deploymentViews.first().apply {
+            enableAutomaticLayout(AutomaticLayout.RankDirection.LeftRight, 300, 300)
+            addProperty(D2Exporter.D2_ANIMATION, AnimationType.D2.name)
+        }
+        val diagrams = D2Exporter().export(workspace)
+        assertEquals(1, diagrams.size)
+        assertEquals(testFileText("amazon-animated/AmazonWebServicesDeployment.d2"), diagrams.first().definition)
     }
 
     @Test
@@ -47,7 +77,7 @@ internal class D2ExporterTest {
         assertEquals(3, diagrams.size)
         assertAll("groups", diagrams.map {
             {
-                val fileName = "groups-${it.key}.d2"
+                val fileName = "groups/groups-${it.key}.d2"
                 assertEquals(testFileText(fileName), it.definition, "${it.key} diagram does not match $fileName")
             }
         })
