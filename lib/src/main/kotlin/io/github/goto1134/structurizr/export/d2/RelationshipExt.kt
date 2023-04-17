@@ -5,7 +5,6 @@ import com.structurizr.model.Relationship
 import com.structurizr.view.*
 import io.github.goto1134.structurizr.export.d2.model.D2Connection
 
-
 fun Relationship.typeOf(view: View): String {
     val typeOf = buildString {
         if (InteractionStyle.Asynchronous == interactionStyle) append("Async ")
@@ -32,7 +31,7 @@ fun RelationshipView.d2Connection(): D2Connection {
     }
 }
 
-fun RelationshipView.relationshipName(view: ModelView): String {
+fun RelationshipView.relationshipNameInView(view: ModelView): String {
     return buildString {
         append(
             relationship.source.absolutePathInView(view),

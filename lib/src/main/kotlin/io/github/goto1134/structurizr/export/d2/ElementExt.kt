@@ -4,11 +4,10 @@ import com.structurizr.model.DeploymentNode
 import com.structurizr.model.Element
 import com.structurizr.model.GroupableElement
 import com.structurizr.view.*
-import java.util.*
 
 fun ElementStyle.d2Opacity() = opacity.toDouble() / 100
 
-fun RelationshipView.d2Label(view: View): String {
+fun RelationshipView.d2LabelInView(view: View): String {
     return buildString {
         if (view is DynamicView) {
             append(order, " – ")
@@ -50,4 +49,8 @@ private fun Element.parentSequence(): Sequence<Element> = generateSequence(this)
 fun Element.absolutePathInView(view: ModelView): String {
     return parentSequence().takeWhile { it.inViewOrRoot(view) }.asIterable().reversed()
         .joinToString(separator = ".") { it.nameInView(view) }
+}
+
+fun Element.groupAbsolutePathInView(view: ModelView): String? {
+    return listOfNotNull(parent?.absolutePathInView(view), d2GroupId).joinToString(".").takeUnless(String::isBlank)
 }
