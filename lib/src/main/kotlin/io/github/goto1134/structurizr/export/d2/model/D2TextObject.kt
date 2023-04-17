@@ -10,6 +10,23 @@ class D2TextObject(
     properties: List<D2Property<D2Keyword, *>>,
     style: List<D2Property<D2StyleKeyword, *>>
 ) : D2Object(name, properties, style) {
+
+    companion object {
+        fun build(name: String, language: String, text: String, block: Builder.() -> Unit): D2TextObject {
+            return Builder(name, language, text).apply(block).build()
+        }
+    }
+
+    override fun openObject(writer: IndentingWriter) {
+        writer.writeLine("$name: |`$language")
+        writer.indented {
+            text.splitToSequence("\\R".toRegex()).forEach {
+                writeLine(it)
+            }
+        }
+        writer.writeLine("`| {")
+    }
+
     class Builder(private val name: String, private val language: String, private val text: String) {
         private val properties: MutableList<D2Property<D2Keyword, *>> = ArrayList()
         private val style: MutableList<D2Property<D2StyleKeyword, *>> = ArrayList()
@@ -27,21 +44,6 @@ class D2TextObject(
 
         fun build(): D2TextObject {
             return D2TextObject(name, language, text, properties, style)
-        }
-    }
-
-    override fun writeHeader(writer: IndentingWriter) {
-        writer.writeLine("$name: |`$language")
-        writer.indented {
-            text.splitToSequence("\\R".toRegex()).forEach(this::writeLine)
-        }
-        writer.writeLine("`| {")
-        writer.indent()
-    }
-
-    companion object {
-        fun build(name: String, language: String, text: String, block: Builder.() -> Unit): D2TextObject {
-            return Builder(name, language, text).apply(block).build()
         }
     }
 }

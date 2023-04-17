@@ -1,21 +1,19 @@
 package io.github.goto1134.structurizr.export.d2
 
 import com.structurizr.export.AbstractDiagramExporter
-import com.structurizr.export.Diagram
 import com.structurizr.export.IndentingWriter
-import com.structurizr.model.Container
-import com.structurizr.model.DeploymentNode
-import com.structurizr.model.Element
-import com.structurizr.model.SoftwareSystem
+import com.structurizr.model.*
 import com.structurizr.view.*
 import io.github.goto1134.structurizr.export.d2.model.D2Object
 import io.github.goto1134.structurizr.export.d2.model.D2TextObject
 
-class D2Exporter : AbstractDiagramExporter() {
+open class D2Exporter : AbstractDiagramExporter() {
 
     companion object {
         const val D2_TITLE_POSITION = "d2.title_position"
     }
+
+    override fun createDiagram(view: ModelView, definition: String) = D2Diagram(view, definition)
 
     override fun writeHeader(view: ModelView, writer: IndentingWriter) {
         D2TextObject.build("title", "md", "# ${view.d2Title}") {
@@ -25,55 +23,62 @@ class D2Exporter : AbstractDiagramExporter() {
         d2Direction?.toD2Property()?.write(writer)
     }
 
+    override fun writeElements(view: ModelView, elements: List<GroupableElement>, writer: IndentingWriter) {
+        super.writeElements(view, elements, writer)
+        elements.asSequence()
+            .filter { it.group != null }
+            .distinctBy { it.group }
+            .forEach { writeGroup(view, it, writer) }
+    }
+
+    protected fun writeGroup(view: ModelView, element: GroupableElement, writer: IndentingWriter) {
+        val groupAbsolutePathInView = element.groupAbsolutePathInView(view) ?: return
+        D2Object.build(groupAbsolutePathInView) {
+            label(element.group)
+            withGroupStyle()
+        }.writeObject(writer)
+    }
+
     override fun writeFooter(view: ModelView, writer: IndentingWriter) = Unit
     override fun startEnterpriseBoundary(view: ModelView, enterpriseName: String, writer: IndentingWriter) = Unit
     override fun endEnterpriseBoundary(view: ModelView, writer: IndentingWriter) = Unit
+    override fun startGroupBoundary(view: ModelView, group: String, writer: IndentingWriter) = Unit
+    override fun endGroupBoundary(view: ModelView, writer: IndentingWriter) = Unit
 
-    override fun startGroupBoundary(view: ModelView, group: String, writer: IndentingWriter) {
-        D2Object.build(Group(group).d2Id) {
-            label(group)
-            withGroupStyle()
-        }.startObject(writer)
-    }
+    override fun startSoftwareSystemBoundary(
+        view: ModelView,
+        softwareSystem: SoftwareSystem,
+        writer: IndentingWriter
+    ) = softwareSystem.writeD2Object(view, writer)
 
-    override fun endGroupBoundary(view: ModelView, writer: IndentingWriter) {
-        D2Object.endObject(writer)
-    }
+    override fun endSoftwareSystemBoundary(view: ModelView, writer: IndentingWriter) = Unit
 
-    override fun startSoftwareSystemBoundary(view: ModelView, softwareSystem: SoftwareSystem, writer: IndentingWriter) {
-        softwareSystem.d2ObjectInView(view).startObject(writer)
-    }
+    override fun startContainerBoundary(
+        view: ModelView,
+        container: Container,
+        writer: IndentingWriter
+    ) = container.writeD2Object(view, writer)
 
-    override fun endSoftwareSystemBoundary(view: ModelView, writer: IndentingWriter) {
-        D2Object.endObject(writer)
-    }
-
-    override fun startContainerBoundary(view: ModelView, container: Container, writer: IndentingWriter) {
-        container.d2ObjectInView(view).startObject(writer)
-    }
-
-    override fun endContainerBoundary(view: ModelView, writer: IndentingWriter) {
-        D2Object.endObject(writer)
-    }
+    override fun endContainerBoundary(view: ModelView, writer: IndentingWriter) = Unit
 
     override fun startDeploymentNodeBoundary(
-        view: DeploymentView, deploymentNode: DeploymentNode, writer: IndentingWriter
-    ) {
-        deploymentNode.d2ObjectInView(view).startObject(writer)
-    }
+        view: DeploymentView,
+        deploymentNode: DeploymentNode,
+        writer: IndentingWriter
+    ) = deploymentNode.writeD2Object(view, writer)
 
-    override fun endDeploymentNodeBoundary(view: ModelView, writer: IndentingWriter) {
-        D2Object.endObject(writer)
-    }
+    override fun endDeploymentNodeBoundary(view: ModelView, writer: IndentingWriter) = Unit
 
-    override fun writeElement(view: ModelView, element: Element, writer: IndentingWriter) {
-        element.d2ObjectInView(view).writeObject(writer)
-    }
+    override fun writeElement(
+        view: ModelView,
+        element: Element,
+        writer: IndentingWriter
+    ) = element.writeD2Object(view, writer)
 
     override fun writeRelationship(view: ModelView, relationshipView: RelationshipView, writer: IndentingWriter) {
         val relationshipStyle = findRelationshipStyle(view, relationshipView.relationship)
-        D2Object.build(relationshipView.relationshipName(view)) {
-            label(relationshipView.d2Label(view))
+        D2Object.build(relationshipView.relationshipNameInView(view)) {
+            label(relationshipView.d2LabelInView(view))
             opacity(relationshipStyle.d2Opacity())
             stroke(relationshipStyle.color)
             fontSize(relationshipStyle.fontSize)
@@ -86,14 +91,12 @@ class D2Exporter : AbstractDiagramExporter() {
         }.writeObject(writer)
     }
 
-
-    override fun createDiagram(view: ModelView, definition: String): Diagram {
-        return D2Diagram(view, definition)
-    }
+    private fun Element.writeD2Object(view: ModelView, writer: IndentingWriter) =
+        d2ObjectInView(view).writeObject(writer)
 
     private fun Element.d2ObjectInView(view: ModelView): D2Object {
         val style = findElementStyle(view, this)
-        return D2Object.build(d2Id) {
+        return D2Object.build(absolutePathInView(view)) {
             label(d2Label(view))
             shape(style.shape.d2Shape())
             icon(style.icon)
@@ -114,16 +117,13 @@ class D2Exporter : AbstractDiagramExporter() {
         }
     }
 
-    private fun Element.d2Label(view: ModelView): String {
-        return buildString {
-            append(name)
-            typeOfOrNull(view)?.let {
-                append("\n", it)
-            }
+    private fun Element.d2Label(view: ModelView): String = buildString {
+        append(name)
+        typeOfOrNull(view)?.let {
+            append("\n", it)
         }
     }
 
-    private fun Element.typeOfOrNull(view: ModelView, includeMetadataSymbols: Boolean = true): String? {
-        return typeOf(view, this, includeMetadataSymbols).takeUnless(String::isBlank)
-    }
+    private fun Element.typeOfOrNull(view: ModelView, includeMetadataSymbols: Boolean = true): String? =
+        typeOf(view, this, includeMetadataSymbols).takeUnless(String::isBlank)
 }

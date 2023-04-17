@@ -8,6 +8,43 @@ open class D2Object(
     protected val properties: List<D2Property<D2Keyword, *>>,
     protected val style: List<D2Property<D2StyleKeyword, *>>
 ) {
+
+    companion object {
+        fun build(name: String, block: Builder.() -> Unit = {}): D2Object {
+            return Builder(name).apply(block).build()
+        }
+    }
+
+    open fun openObject(writer: IndentingWriter) {
+        writer.writeLine("$name: {")
+    }
+
+    private fun writeProperties(writer: IndentingWriter) {
+        properties.write(writer)
+        if (style.isNotEmpty()) {
+            writer.writeLine("${D2Keyword.STYLE}: {")
+            writer.indented {
+                style.write(writer)
+            }
+            writer.writeLine("}")
+        }
+    }
+
+    private fun List<D2Property<*, *>>.write(writer: IndentingWriter) {
+        for (property in sortedBy { it.keyword.toString() }) {
+            property.write(writer)
+        }
+    }
+
+    fun writeObject(writer: IndentingWriter, block: () -> Unit = { }) {
+        openObject(writer)
+        writer.indented {
+            writeProperties(writer)
+            block()
+        }
+        writer.writeLine("}")
+    }
+
     class Builder(private val name: String) {
         companion object {
             const val STROKE_DASHED = 5
@@ -86,41 +123,6 @@ open class D2Object(
 
         fun build(): D2Object {
             return D2Object(name, properties, style)
-        }
-    }
-
-    fun startObject(writer: IndentingWriter) {
-        writeHeader(writer)
-        writeProperties(writer)
-    }
-
-    open fun writeHeader(writer: IndentingWriter) {
-        writer.writeLine("$name: {")
-        writer.indent()
-    }
-
-    private fun writeProperties(writer: IndentingWriter) {
-        properties.sortedBy { it.keyword.toString() }.forEach { it.write(writer) }
-        writer.writeLine("${D2Keyword.STYLE}: {")
-        writer.indented {
-            style.sortedBy { it.keyword.toString() }.forEach { it.write(writer) }
-        }
-        writer.writeLine("}")
-    }
-
-    fun writeObject(writer: IndentingWriter) {
-        startObject(writer)
-        endObject(writer)
-    }
-
-    companion object {
-        fun build(name: String, block: Builder.() -> Unit): D2Object {
-            return Builder(name).apply(block).build()
-        }
-
-        fun endObject(writer: IndentingWriter) {
-            writer.outdent()
-            writer.writeLine("}")
         }
     }
 }
