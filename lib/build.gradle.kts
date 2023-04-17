@@ -1,9 +1,12 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    `java-library`
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.git.versioning)
     `maven-publish`
     signing
-    alias(libs.plugins.spotbugs)
-    alias(libs.plugins.git.versioning)
 }
 
 description = "Exports Structurizr models and views to D2 format"
@@ -24,13 +27,21 @@ repositories {
 }
 
 dependencies {
+    implementation(kotlin("stdlib-jdk8"))
     implementation(libs.structurizr.export)
     testImplementation(libs.structurizr.client)
     testImplementation(libs.junit.jupyter)
+    testImplementation(kotlin("test-junit5"))
 }
 
 base {
     archivesName.set(rootProject.name)
+}
+
+val dokkaJavadocJar = tasks.register<Jar>("dokkaJavadocJar") {
+    dependsOn(tasks.dokkaJavadoc)
+    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
 }
 
 tasks.named<Test>("test") {
@@ -48,12 +59,15 @@ tasks.withType<Jar> {
         )
     }
 }
-
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-    withSourcesJar()
-    withJavadocJar()
+}
+
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+    }
 }
 
 publishing {
@@ -76,6 +90,8 @@ publishing {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
             artifactId = base.archivesName.get()
+            artifact(dokkaJavadocJar)
+            artifact(tasks.kotlinSourcesJar)
 
             pom {
                 name.set("Structurizr D2 Exporter")
@@ -111,12 +127,4 @@ signing {
     val signingPassword: String? by project
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign(publishing.publications)
-}
-
-spotbugs {
-    omitVisitors.set(listOf(
-        // This project forces \n instead of system-specific line separators
-        // https://spotbugs.readthedocs.io/en/stable/detectors.html#formatstringchecker
-        "FormatStringChecker"
-    ))
 }
