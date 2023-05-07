@@ -3,7 +3,7 @@ package io.github.goto1134.structurizr.export.d2.model
 /**
  * The direction of the diagram elements arrangement
  *
- * @see [D2 Direction](https://d2lang.com/tour/layouts.direction)
+ * @see [D2 Direction](https://d2lang.com/tour/layouts/#direction)
  */
 enum class D2Direction(private val value: String) {
     BOTTOM_TO_TOP("up"),
@@ -12,8 +12,4 @@ enum class D2Direction(private val value: String) {
     LEFT_TO_RIGHT("right");
 
     override fun toString() = value
-
-    fun toD2Property(): D2Property<D2Keyword, D2Direction> {
-        return D2Property(D2Keyword.DIRECTION, this)
-    }
 }

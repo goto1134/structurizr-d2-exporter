@@ -1,25 +1,32 @@
 package io.github.goto1134.structurizr.export.d2.model
 
 import com.structurizr.export.IndentingWriter
-import io.github.goto1134.structurizr.export.d2.indented
 
-open class D2Object(
-    @JvmField protected val name: String,
-    protected val properties: List<D2Property<D2Keyword, *>>,
-    protected val style: List<D2Property<D2StyleKeyword, *>>
+
+fun IndentingWriter.indented(block: IndentingWriter.() -> Unit) {
+    indent()
+    block()
+    outdent()
+}
+
+/**
+ * @param <K> – D2 object property name
+ * @param <V> - D2 object property value
+</V></K> */
+open class D2Property<K, V>(@JvmField val keyword: K, @JvmField protected val value: V) {
+    open fun write(writer: IndentingWriter) = writer.writeLine("$keyword: $value")
+}
+
+class D2WrappedStringProperty<K>(keyword: K, value: String) : D2Property<K, String>(keyword, value) {
+    override fun write(writer: IndentingWriter) {
+        writer.writeLine("$keyword: \"$value\"")
+    }
+}
+
+sealed class D2Object(
+    protected val properties: List<D2Property<D2Keyword, *>>, protected val style: List<D2Property<D2StyleKeyword, *>>
 ) {
-
-    companion object {
-        fun build(name: String, block: Builder.() -> Unit = {}): D2Object {
-            return Builder(name).apply(block).build()
-        }
-    }
-
-    open fun openObject(writer: IndentingWriter) {
-        writer.writeLine("$name: {")
-    }
-
-    private fun writeProperties(writer: IndentingWriter) {
+    open fun writeObject(writer: IndentingWriter, writeInside: (IndentingWriter) -> Unit = { }) {
         properties.write(writer)
         if (style.isNotEmpty()) {
             writer.writeLine("${D2Keyword.STYLE}: {")
@@ -28,6 +35,7 @@ open class D2Object(
             }
             writer.writeLine("}")
         }
+        writeInside(writer)
     }
 
     private fun List<D2Property<*, *>>.write(writer: IndentingWriter) {
@@ -35,94 +43,144 @@ open class D2Object(
             property.write(writer)
         }
     }
+}
 
-    fun writeObject(writer: IndentingWriter, block: () -> Unit = { }) {
+class GlobalObject private constructor(
+    properties: List<D2Property<D2Keyword, *>>, style: List<D2Property<D2StyleKeyword, *>>
+) : D2Object(properties, style) {
+    companion object {
+        fun build(block: PropertyBuilder.() -> Unit = {}) = with(PropertyBuilder().apply(block)) {
+            GlobalObject(properties, style)
+        }
+    }
+}
+
+open class NamedObject protected constructor(
+    protected val name: String, properties: List<D2Property<D2Keyword, *>>, style: List<D2Property<D2StyleKeyword, *>>
+) : D2Object(properties, style) {
+    companion object {
+        fun build(name: String, block: PropertyBuilder.() -> Unit = {}) = with(PropertyBuilder().apply(block)) {
+            NamedObject(name, properties, style)
+        }
+    }
+
+    open fun openObject(writer: IndentingWriter) {
+        writer.writeLine("$name: {")
+    }
+
+    override fun writeObject(writer: IndentingWriter, writeInside: (IndentingWriter) -> Unit) {
         openObject(writer)
         writer.indented {
-            writeProperties(writer)
-            block()
+            super.writeObject(writer, writeInside)
         }
         writer.writeLine("}")
     }
+}
 
-    class Builder(private val name: String) {
-        companion object {
-            const val STROKE_DASHED = 5
-            const val STROKE_DOTTED = 2
-        }
+class TextObject private constructor(
+    name: String,
+    private val language: String,
+    private val text: String,
+    properties: List<D2Property<D2Keyword, *>>,
+    style: List<D2Property<D2StyleKeyword, *>>
+) : NamedObject(name, properties, style) {
 
-        private val properties: MutableList<D2Property<D2Keyword, *>> = ArrayList()
-        private val style: MutableList<D2Property<D2StyleKeyword, *>> = ArrayList()
-
-        fun label(label: String): Builder = apply {
-            properties.add(D2WrappedStringProperty(D2Keyword.LABEL, label))
-        }
-
-        fun shape(shape: D2Shape): Builder = apply {
-            properties.add(D2Property(D2Keyword.SHAPE, shape))
-        }
-
-        fun icon(icon: String?): Builder = apply {
-            if (!icon.isNullOrBlank()) {
-                properties.add(D2WrappedStringProperty(D2Keyword.ICON, icon))
+    companion object {
+        fun build(name: String, language: String, text: String, block: PropertyBuilder.() -> Unit = {}) =
+            with(PropertyBuilder().apply(block)) {
+                TextObject(name, language, text, properties, style)
             }
+
+        val UNICODE_NEWLINE_PATTERN = Regex("\\R")
+    }
+
+    override fun openObject(writer: IndentingWriter) {
+        writer.writeLine("$name: |`$language")
+        writer.indented {
+            text.splitToSequence(UNICODE_NEWLINE_PATTERN).forEach(::writeLine)
         }
+        writer.writeLine("`| {")
+    }
+}
 
-        fun link(link: String?): Builder = apply {
-            if (!link.isNullOrBlank()) {
-                properties.add(D2WrappedStringProperty(D2Keyword.LINK, link))
-            }
-        }
+class PropertyBuilder {
+    companion object {
+        const val STROKE_DASHED = 5
+        const val STROKE_DOTTED = 2
+    }
 
-        fun tooltip(tooltip: String?): Builder = apply {
-            if (!tooltip.isNullOrBlank()) {
-                properties.add(D2WrappedStringProperty(D2Keyword.TOOLTIP, tooltip))
-            }
-        }
+    internal val properties: MutableList<D2Property<D2Keyword, *>> = ArrayList()
+    internal val style: MutableList<D2Property<D2StyleKeyword, *>> = ArrayList()
 
-        fun fill(fill: String): Builder = apply {
-            style.add(D2WrappedStringProperty(D2StyleKeyword.FILL_COLOR, fill))
-        }
+    fun label(label: String) = apply {
+        properties.add(D2WrappedStringProperty(D2Keyword.LABEL, label))
+    }
 
-        fun stroke(stroke: String): Builder = apply {
-            style.add(D2WrappedStringProperty(D2StyleKeyword.STROKE_COLOR, stroke))
-        }
+    fun shape(shape: D2Shape) = apply {
+        properties.add(D2Property(D2Keyword.SHAPE, shape))
+    }
 
-        fun strokeWidth(width: Int?): Builder = apply {
-            if (width != null) style.add(D2Property(D2StyleKeyword.STROKE_WIDTH, width))
-        }
+    fun icon(icon: String?) = apply {
+        if (!icon.isNullOrBlank()) properties.add(D2WrappedStringProperty(D2Keyword.ICON, icon))
+    }
 
-        fun dashed(): Builder = strokeDash(STROKE_DASHED)
+    fun link(link: String?) = apply {
+        if (!link.isNullOrBlank()) properties.add(D2WrappedStringProperty(D2Keyword.LINK, link))
+    }
 
-        fun dotted(): Builder = strokeDash(STROKE_DOTTED)
+    fun tooltip(tooltip: String?) = apply {
+        if (!tooltip.isNullOrBlank()) properties.add(D2WrappedStringProperty(D2Keyword.TOOLTIP, tooltip))
+    }
 
-        fun strokeDash(dash: Int): Builder = apply {
-            style.add(D2Property(D2StyleKeyword.STROKE_DASH, dash))
-        }
+    fun fill(fill: String) = apply {
+        style.add(D2WrappedStringProperty(D2StyleKeyword.FILL_COLOR, fill))
+    }
 
+    fun fillPattern(fillPattern: D2FillPattern?) = apply {
+        if (fillPattern != null) style.add(D2Property(D2StyleKeyword.FILL_PATTERN, fillPattern))
+    }
 
-        fun multiple(value: Boolean): Builder = apply {
-            style.add(D2Property(D2StyleKeyword.SHAPE_MULTIPLE, value))
-        }
+    fun direction(direction: D2Direction?) = apply {
+        if (direction != null) properties.add(D2Property(D2Keyword.DIRECTION, direction))
+    }
 
-        fun fontColor(fontColor: String): Builder = apply {
-            style.add(D2WrappedStringProperty(D2StyleKeyword.TEXT_FONT_COLOR, fontColor))
-        }
+    fun stroke(stroke: String) = apply {
+        style.add(D2WrappedStringProperty(D2StyleKeyword.STROKE_COLOR, stroke))
+    }
 
-        fun fontSize(fontSize: Int): Builder = apply {
-            style.add(D2Property(D2StyleKeyword.TEXT_FONT_SIZE, fontSize))
-        }
+    fun strokeWidth(width: Int?) = apply {
+        if (width != null) style.add(D2Property(D2StyleKeyword.STROKE_WIDTH, width))
+    }
 
-        fun opacity(opacity: Double): Builder = apply {
-            style.add(D2Property(D2StyleKeyword.OPACITY, opacity))
-        }
+    fun dashed() = strokeDash(STROKE_DASHED)
+    fun dotted() = strokeDash(STROKE_DOTTED)
+    fun strokeDash(dash: Int) = apply {
+        style.add(D2Property(D2StyleKeyword.STROKE_DASH, dash))
+    }
 
-        fun withGroupStyle(): Builder {
-            return fill("white").stroke("black")
-        }
+    fun multiple(value: Boolean) = apply {
+        style.add(D2Property(D2StyleKeyword.SHAPE_MULTIPLE, value))
+    }
 
-        fun build(): D2Object {
-            return D2Object(name, properties, style)
-        }
+    fun fontColor(fontColor: String) = apply {
+        style.add(D2WrappedStringProperty(D2StyleKeyword.TEXT_FONT_COLOR, fontColor))
+    }
+
+    fun fontSize(fontSize: Int) = apply {
+        style.add(D2Property(D2StyleKeyword.TEXT_FONT_SIZE, fontSize))
+    }
+
+    fun opacity(opacity: Double) = apply {
+        style.add(D2Property(D2StyleKeyword.OPACITY, opacity))
+    }
+
+    fun withGroupStyle() = fill("white").stroke("black")
+
+    fun animated(animated: Boolean) = apply {
+        if (animated) style.add(D2Property(D2StyleKeyword.CONNECTION_ANIMATED, true))
+    }
+
+    fun near(near: D2NearConstant) = apply {
+        properties.add(D2Property(D2Keyword.NEAR, near.toString()))
     }
 }

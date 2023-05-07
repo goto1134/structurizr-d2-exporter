@@ -3,7 +3,7 @@ package io.github.goto1134.structurizr.export.d2.model
 /**
  * Shape of D2 object
  *
- * @see [D2 Shapes](https://d2lang.com/tour/shapes)
+ * @see [D2 Shapes](https://d2lang.com/tour/shapes/)
  */
 enum class D2Shape(private val value: String) {
     RECTANGLE("rectangle"),
