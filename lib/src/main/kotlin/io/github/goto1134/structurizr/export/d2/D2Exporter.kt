@@ -5,14 +5,17 @@ import com.structurizr.export.Diagram
 import com.structurizr.export.IndentingWriter
 import com.structurizr.model.*
 import com.structurizr.view.*
-import io.github.goto1134.structurizr.export.d2.model.D2Object
-import io.github.goto1134.structurizr.export.d2.model.D2TextObject
+import io.github.goto1134.structurizr.export.d2.model.GlobalObject
+import io.github.goto1134.structurizr.export.d2.model.NamedObject
+import io.github.goto1134.structurizr.export.d2.model.TextObject
 
 open class D2Exporter : AbstractDiagramExporter() {
 
     companion object {
         const val D2_TITLE_POSITION = "d2.title_position"
         const val D2_ANIMATION = "d2.animation"
+        const val D2_CONNECTION_ANIMATED = "d2.animated"
+        const val D2_FILL_PATTERN = "d2.fill_pattern"
         const val STRUCTURIZR_INCLUDE_SOFTWARE_SYSTEM_BOUNDARIES = "structurizr.softwareSystemBoundaries"
     }
 
@@ -79,8 +82,8 @@ open class D2Exporter : AbstractDiagramExporter() {
     protected fun exportD2Steps(view: ModelView, animations: List<Animation>): Diagram {
         val writer = IndentingWriter()
         writeHeader(view, writer)
-        D2Object.build("steps").writeObject(writer) {
-            writeAnimations(view, animations, writer)
+        NamedObject.build("steps").writeObject(writer) {
+            writeAnimations(view, animations, it)
         }
         writeFooter(view, writer)
         return createDiagram(view, writer.toString())
@@ -92,7 +95,7 @@ open class D2Exporter : AbstractDiagramExporter() {
         val relationships = view.relationships.associateBy { it.id }
 
         for (animation in animations.sortedBy { it.order }) {
-            D2Object.build(animation.order.toString()).writeObject(writer) {
+            NamedObject.build(animation.order.toString()).writeObject(writer) {
                 writeAnimationElements(
                     view,
                     animation.elements
@@ -173,11 +176,14 @@ open class D2Exporter : AbstractDiagramExporter() {
     override fun isAnimationSupported(view: ModelView) = view.animationType == AnimationType.FRAMES
 
     override fun writeHeader(view: ModelView, writer: IndentingWriter) {
-        D2TextObject.build("title", "md", "# ${view.d2Title}") {
+        TextObject.build("title", "md", "# ${view.d2Title}") {
             near(view.d2TitlePosition)
         }.writeObject(writer)
-        val d2Direction = view.automaticLayout?.getD2Direction()
-        d2Direction?.toD2Property()?.write(writer)
+
+        GlobalObject.build {
+            direction(view.d2Direction)
+            fillPattern(view.d2FillPattern)
+        }.writeObject(writer)
     }
 
     override fun writeElements(view: ModelView, elements: List<GroupableElement>, writer: IndentingWriter) {
@@ -190,7 +196,7 @@ open class D2Exporter : AbstractDiagramExporter() {
 
     protected fun writeGroup(view: ModelView, element: GroupableElement, writer: IndentingWriter) {
         val groupAbsolutePathInView = element.groupAbsolutePathInView(view) ?: return
-        D2Object.build(groupAbsolutePathInView) {
+        NamedObject.build(groupAbsolutePathInView) {
             label(element.group)
             withGroupStyle()
         }.writeObject(writer)
@@ -234,9 +240,10 @@ open class D2Exporter : AbstractDiagramExporter() {
 
     override fun writeRelationship(view: ModelView, relationshipView: RelationshipView, writer: IndentingWriter) {
         val relationshipStyle = findRelationshipStyle(view, relationshipView.relationship)
-        D2Object.build(relationshipView.relationshipNameInView(view)) {
+        NamedObject.build(relationshipView.relationshipNameInView(view)) {
+            animated(relationshipStyle.d2Animated)
             label(relationshipView.d2LabelInView(view))
-            opacity(relationshipStyle.d2Opacity())
+            opacity(relationshipStyle.d2Opacity)
             stroke(relationshipStyle.color)
             fontSize(relationshipStyle.fontSize)
             when (relationshipStyle.style) {
@@ -248,21 +255,19 @@ open class D2Exporter : AbstractDiagramExporter() {
         }.writeObject(writer)
     }
 
-    private fun Element.writeD2Object(view: ModelView, writer: IndentingWriter) =
-        d2ObjectInView(view).writeObject(writer)
-
-    private fun Element.d2ObjectInView(view: ModelView): D2Object {
+    private fun Element.writeD2Object(view: ModelView, writer: IndentingWriter) {
         val style = findElementStyle(view, this)
-        return D2Object.build(absolutePathInView(view)) {
+        NamedObject.build(absolutePathInView(view)) {
             label(d2Label(view))
-            shape(style.shape.d2Shape())
+            shape(style.d2Shape)
             icon(style.icon)
             link(url)
             tooltip(description)
             fill(style.background)
+            fillPattern(style.d2FillPattern)
             stroke(style.stroke)
             strokeWidth(style.strokeWidth)
-            opacity(style.d2Opacity())
+            opacity(style.d2Opacity)
             when (style.border) {
                 Border.Dashed -> dashed()
                 Border.Dotted -> dotted()
@@ -271,7 +276,7 @@ open class D2Exporter : AbstractDiagramExporter() {
             multiple(hasMultipleInstances)
             fontColor(style.color)
             fontSize(style.fontSize)
-        }
+        }.writeObject(writer)
     }
 
     private fun Element.d2Label(view: ModelView): String = buildString {

@@ -3,7 +3,7 @@ package io.github.goto1134.structurizr.export.d2.model
 /**
  * Constants for positioning text in the diagram.
  *
- * @see [D2 text positioning near a constant](https://d2lang.com/tour/text/.near-a-constant)
+ * @see [D2 text positioning near a constant](https://d2lang.com/tour/positions/#near)
  */
 enum class D2NearConstant(private val value: String) {
     TOP_LEFT("top-left"),

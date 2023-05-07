@@ -4,53 +4,58 @@ import com.structurizr.model.DeploymentNode
 import com.structurizr.model.Element
 import com.structurizr.model.GroupableElement
 import com.structurizr.view.*
+import io.github.goto1134.structurizr.export.d2.model.D2FillPattern
+import io.github.goto1134.structurizr.export.d2.model.D2Shape
 
-fun ElementStyle.d2Opacity() = opacity.toDouble() / 100
+val ElementStyle.d2Opacity get() = opacity.toDouble() / 100
 
-fun RelationshipView.d2LabelInView(view: View): String {
-    return buildString {
-        if (view is DynamicView) {
-            append(order, " – ")
-        }
-        append(description.ifBlank { relationship.description })
-        if (view !is DynamicView) {
-            relationship.typeOfOrNull(view)?.let { append("\n", it) }
-        }
+val ElementStyle.d2FillPattern get() = D2FillPattern.get(properties[D2Exporter.D2_FILL_PATTERN])
+
+val ElementStyle.d2Shape
+    get() = when (shape) {
+        Shape.Person, Shape.Robot -> D2Shape.PERSON
+        Shape.Cylinder -> D2Shape.CYLINDER
+        Shape.Folder -> D2Shape.PACKAGE
+        Shape.Ellipse -> D2Shape.OVAL
+        Shape.Circle -> D2Shape.CIRCLE
+        Shape.Hexagon -> D2Shape.HEXAGON
+        Shape.Pipe -> D2Shape.QUEUE
+        Shape.Diamond -> D2Shape.DIAMOND
+        else -> D2Shape.RECTANGLE
     }
-}
-
-@JvmInline
-value class Group(private val name: String) {
-    val d2Id get() = "\"group_$name\""
-}
 
 val Element.d2Id get() = "container_$id"
 
-val Element.d2GroupId get() = if (this is GroupableElement && !group.isNullOrEmpty()) Group(group).d2Id else null
+val Element.d2GroupId get() = (this as? GroupableElement)?.d2GroupId
+
+val GroupableElement.d2GroupId get() = group?.takeUnless { it.isEmpty() }?.let { "\"group_$it\"" }
 
 val Element.hasMultipleInstances get() = this is DeploymentNode && "1" != instances
 
-fun Element.inView(view: ModelView) = view.isElementInView(this)
+fun Element.inViewNotRoot(view: ModelView) = view.isElementInView(this)
 
 fun Element.inViewOrRoot(view: ModelView): Boolean {
     return view is ComponentView && equals(view.container)
             || view is ContainerView && equals(view.softwareSystem)
             || view is DynamicView && equals(view.element)
-            || inView(view)
+            || inViewNotRoot(view)
 }
 
 private fun Element.nameInView(view: ModelView) = buildString {
-    if (inView(view) && d2GroupId != null) append(d2GroupId, ".")
+    if (inViewNotRoot(view)) d2GroupId?.let { append(it, ".") }
     append(d2Id)
 }
 
 private fun Element.parentSequence(): Sequence<Element> = generateSequence(this) { it.parent }
 
 fun Element.absolutePathInView(view: ModelView): String {
-    return parentSequence().takeWhile { it.inViewOrRoot(view) }.asIterable().reversed()
+    return parentSequence()
+        .takeWhile { it.inViewOrRoot(view) }.asIterable()
+        .reversed()
         .joinToString(separator = ".") { it.nameInView(view) }
 }
 
-fun Element.groupAbsolutePathInView(view: ModelView): String? {
-    return listOfNotNull(parent?.absolutePathInView(view), d2GroupId).joinToString(".").takeUnless(String::isBlank)
+fun GroupableElement.groupAbsolutePathInView(view: ModelView): String? {
+    return listOfNotNull(parent?.absolutePathInView(view), d2GroupId).joinToString(".")
+        .takeUnless(String::isBlank)
 }

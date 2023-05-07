@@ -5,6 +5,7 @@ package io.github.goto1134.structurizr.export.d2.model
  */
 enum class D2StyleKeyword(private val value: String) {
     FILL_COLOR("fill"),
+    FILL_PATTERN("fill-pattern"),
     STROKE_COLOR("stroke"),
     STROKE_WIDTH("stroke-width"),
     STROKE_DASH("stroke-dash"),
