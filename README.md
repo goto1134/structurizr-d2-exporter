@@ -26,10 +26,7 @@ and is available on Maven Central, for inclusion in your own Java applications:
 ## `d2.title_position`
 
 * Entity: [`views`, `view`](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#views)
-*
-
-Values: `top-left`, `top-center`, `top-right`, `center-left`, `center-right`, `bottom-left`, `bottom-center`, `bottom-right`
-
+* Values: `top-left`, `top-center`, `top-right`, `center-left`, `center-right`, `bottom-left`, `bottom-center`, `bottom-right`
 * Default: `top-center`
 
 Specifies diagram title position. For more details, see [d2 near](https://d2lang.com/tour/positions/#near).
@@ -50,7 +47,7 @@ Source: [title-position/workspace.dsl](lib/src/test/resources/title-position/wor
 Specifies animation variant for [animated structurizr views](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#animation).
 
 * `d2` is for [d2 steps animation](https://d2lang.com/tour/steps) that allows you
-to produce animated images
+to produce animated images.
 * `frames` is for structurizr default frame animation.
 Unfortunately, it is not exportable yet.
 * `no` can be used in case you have animation steps, but do not want the animation.
@@ -62,7 +59,6 @@ Unfortunately, it is not exportable yet.
 ## `d2.animated`
 
 * Entity:  [`relationship` style](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#relationship-style)
-
 * Values: `true`, `false`
 * Default: `false`
 
@@ -73,7 +69,7 @@ Source: [animated-relation/workspace.dsl](lib/src/test/resources/animated-relati
 ![animated-relation.svg](examples/animated-relation.svg)
 
 **Hint:** Do not forget to provide [`--animate-interval` flag](https://d2lang.com/tour/composition-formats/) when
-producing SVG to see the animation
+producing SVG to see the animation.
 
 ## `d2.fill_pattern`
 * Entity: [`views`, `view`](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#views) ,[`element` style](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#element-style)
@@ -81,7 +77,7 @@ producing SVG to see the animation
 * Default: –
 
 When set on `views` or `view`, adds a [fill pattern](https://d2lang.com/tour/style/#fill-pattern) to the background.
-When set on an `element` style, adds [fill pattern](https://d2lang.com/tour/style/#fill-pattern) to it's body.
+When set on an `element` style, adds [fill pattern](https://d2lang.com/tour/style/#fill-pattern) to its body.
 
 ### Example
 
