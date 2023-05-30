@@ -4,6 +4,7 @@ import com.structurizr.model.DeploymentNode
 import com.structurizr.model.Element
 import com.structurizr.model.GroupableElement
 import com.structurizr.view.*
+import io.github.goto1134.structurizr.export.d2.D2Exporter.Companion.STRUCTURIZR_GROUP_SEPARATOR_PROPERTY_NAME
 import io.github.goto1134.structurizr.export.d2.model.D2FillPattern
 import io.github.goto1134.structurizr.export.d2.model.D2Shape
 
@@ -28,7 +29,36 @@ val Element.d2Id get() = "container_$id"
 
 val Element.d2GroupId get() = (this as? GroupableElement)?.d2GroupId
 
-val GroupableElement.d2GroupId get() = group?.takeUnless { it.isEmpty() }?.let { "\"group_$it\"" }
+val GroupableElement.d2GroupId: String? get() = parentGroupIdSequenceOrNull()?.joinToString(".")
+
+fun GroupableElement.parentGroupIdSequenceOrNull() = parentGroupSequenceOrNull()?.map { "\"group_$it\"" }
+
+fun GroupableElement.parentGroupSequenceOrNull(): Sequence<String>? {
+    val group = group?.takeUnless { it.isEmpty() } ?: return null
+    return when (val separator = model.properties[STRUCTURIZR_GROUP_SEPARATOR_PROPERTY_NAME]) {
+        null -> sequenceOf(group)
+        else -> group.splitToSequence(separator)
+    }
+}
+
+data class GroupWithPath(val parent: Element?, val relativePath: String, val name: String) {
+    fun absolutePathInView(view: ModelView) = buildString {
+        parent?.absolutePathInView(view)?.let { append(it, ".") }
+        append(relativePath)
+    }
+}
+
+fun GroupableElement.groupsWithPathsOrNull() =
+    parentGroupSequenceOrNull()?.scan(GroupWithPath(parent, "", "")) { wrapper, groupName ->
+        GroupWithPath(
+            parent = parent,
+            relativePath = buildString {
+                if (wrapper.relativePath.isNotEmpty()) append(wrapper.relativePath, ".")
+                append("\"group_", groupName, "\"")
+            },
+            name = groupName
+        )
+    }?.drop(1)
 
 val Element.hasMultipleInstances get() = this is DeploymentNode && "1" != instances
 
@@ -53,9 +83,4 @@ fun Element.absolutePathInView(view: ModelView): String {
         .takeWhile { it.inViewOrRoot(view) }.asIterable()
         .reversed()
         .joinToString(separator = ".") { it.nameInView(view) }
-}
-
-fun GroupableElement.groupAbsolutePathInView(view: ModelView): String? {
-    return listOfNotNull(parent?.absolutePathInView(view), d2GroupId).joinToString(".")
-        .takeUnless(String::isBlank)
 }
