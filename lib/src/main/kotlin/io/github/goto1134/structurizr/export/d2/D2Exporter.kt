@@ -17,6 +17,7 @@ open class D2Exporter : AbstractDiagramExporter() {
         const val D2_CONNECTION_ANIMATED = "d2.animated"
         const val D2_FILL_PATTERN = "d2.fill_pattern"
         const val STRUCTURIZR_INCLUDE_SOFTWARE_SYSTEM_BOUNDARIES = "structurizr.softwareSystemBoundaries"
+        const val STRUCTURIZR_GROUP_SEPARATOR_PROPERTY_NAME = "structurizr.groupSeparator"
     }
 
     override fun createDiagram(view: ModelView, definition: String) = D2Diagram(view, definition)
@@ -139,8 +140,7 @@ open class D2Exporter : AbstractDiagramExporter() {
             }
         }
         if (view is ComponentView) {
-            val containers = elementsInStep.filterIsInstance<Component>().map { it.container }
-                .sortedBy { it.id }
+            val containers = elementsInStep.filterIsInstance<Component>().map { it.container }.sortedBy { it.id }
             if (view.includeSoftwareSystemBoundaries) {
                 containers.map { it.softwareSystem }.sortedBy { it.id }.forEach {
                     stepsAnimationState.ifNewElement(it) {
@@ -168,9 +168,11 @@ open class D2Exporter : AbstractDiagramExporter() {
         stepsAnimationState.ifNewElement(element) {
             writeElement(view, element, writer)
         }
-        stepsAnimationState.ifNewGroup(element.group) {
-            writeGroup(view, element, writer)
-        }
+        element.groupsWithPathsOrNull()
+            ?.filter(stepsAnimationState::addGroup)
+            ?.forEach {
+                writeGroup(view, it, writer)
+            }
     }
 
     override fun isAnimationSupported(view: ModelView) = view.animationType == AnimationType.FRAMES
@@ -187,17 +189,43 @@ open class D2Exporter : AbstractDiagramExporter() {
     }
 
     override fun writeElements(view: ModelView, elements: List<GroupableElement>, writer: IndentingWriter) {
-        super.writeElements(view, elements, writer)
         elements.asSequence()
-            .filter { it.group != null }
-            .distinctBy { it.group }
-            .forEach { writeGroup(view, it, writer) }
+            .mapNotNull { it.groupsWithPathsOrNull() }
+            .flatten()
+            .distinct()
+            .forEach {
+                writeGroup(view, it, writer)
+            }
+        elements.sortedBy { it.id }.forEach {
+            writeElementOrDeploymentNode(view, it, writer)
+        }
     }
 
-    protected fun writeGroup(view: ModelView, element: GroupableElement, writer: IndentingWriter) {
-        val groupAbsolutePathInView = element.groupAbsolutePathInView(view) ?: return
-        NamedObject.build(groupAbsolutePathInView) {
-            label(element.group)
+    private fun writeElementOrDeploymentNode(view: ModelView, element: Element, writer: IndentingWriter) {
+        if (view is DeploymentView && element is DeploymentNode) {
+            writeDeploymentNode(view, element, writer)
+        } else {
+            writeElement(view, element, writer)
+        }
+    }
+
+    private fun writeDeploymentNode(view: DeploymentView, deploymentNode: DeploymentNode, writer: IndentingWriter) {
+        startDeploymentNodeBoundary(view, deploymentNode, writer)
+        val elements = sequenceOf(
+            deploymentNode.children.asSequence(),
+            deploymentNode.infrastructureNodes.asSequence(),
+            deploymentNode.softwareSystemInstances.asSequence(),
+            deploymentNode.containerInstances.asSequence()
+        ).flatten()
+            .filter { it.inViewNotRoot(view) }
+            .toList()
+        writeElements(view, elements, writer)
+        endDeploymentNodeBoundary(view, writer)
+    }
+
+    protected fun writeGroup(view: ModelView, groupWithPath: GroupWithPath, writer: IndentingWriter) {
+        NamedObject.build(groupWithPath.absolutePathInView(view)) {
+            label(groupWithPath.name)
             withGroupStyle()
         }.writeObject(writer)
     }
@@ -291,17 +319,13 @@ open class D2Exporter : AbstractDiagramExporter() {
 
     class StepsAnimationState {
         private val metElements: MutableSet<String> = mutableSetOf()
-        private val metGroups: MutableSet<String> = mutableSetOf()
+        private val metGroups: MutableSet<GroupWithPath> = mutableSetOf()
 
         fun addElement(element: Element): Boolean = metElements.add(element.id)
-        fun addGroup(group: String?): Boolean = !group.isNullOrEmpty() && metGroups.add(group)
+        fun addGroup(group: GroupWithPath): Boolean = metGroups.add(group)
 
         fun ifNewElement(element: Element, block: () -> Unit) {
             if (addElement(element)) block()
-        }
-
-        fun ifNewGroup(group: String?, block: () -> Unit) {
-            if (addGroup(group)) block()
         }
     }
 }
