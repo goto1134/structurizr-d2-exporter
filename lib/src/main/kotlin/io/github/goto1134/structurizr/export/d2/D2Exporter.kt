@@ -5,6 +5,7 @@ import com.structurizr.export.Diagram
 import com.structurizr.export.IndentingWriter
 import com.structurizr.model.*
 import com.structurizr.view.*
+import io.github.goto1134.structurizr.export.d2.model.D2Shape
 import io.github.goto1134.structurizr.export.d2.model.GlobalObject
 import io.github.goto1134.structurizr.export.d2.model.NamedObject
 import io.github.goto1134.structurizr.export.d2.model.TextObject
@@ -224,9 +225,20 @@ open class D2Exporter : AbstractDiagramExporter() {
     }
 
     protected fun writeGroup(view: ModelView, groupWithPath: GroupWithPath, writer: IndentingWriter) {
+        val allGroupsStyle = view.viewSet.configuration.styles.findElementStyle("Group")
+        val currentGroupStyle = view.viewSet.configuration.styles.findElementStyle("Group:${groupWithPath.fullGroup}")
         NamedObject.build(groupWithPath.absolutePathInView(view)) {
-            label(groupWithPath.name)
-            withGroupStyle()
+            label(groupWithPath.group)
+            shape(currentGroupStyle?.d2Shape ?: allGroupsStyle?.d2Shape ?: D2Shape.RECTANGLE)
+            icon(currentGroupStyle?.icon ?: allGroupsStyle?.icon)
+            stroke(currentGroupStyle?.stroke ?: currentGroupStyle?.stroke ?: "#cccccc")
+            strokeWidth(currentGroupStyle?.strokeWidth ?: allGroupsStyle?.strokeWidth ?: 2)
+            fontColor(currentGroupStyle?.color ?: allGroupsStyle?.color ?: "#cccccc")
+            fontSize(currentGroupStyle?.fontSize ?: allGroupsStyle?.fontSize ?: 24)
+            opacity(currentGroupStyle?.d2Opacity ?: currentGroupStyle?.d2Opacity ?: 1.0)
+            dashed()
+            fill(currentGroupStyle?.background ?: allGroupsStyle?.background ?: "#ffffff")
+            fillPattern(currentGroupStyle?.d2FillPattern ?: allGroupsStyle?.d2FillPattern)
         }.writeObject(writer)
     }
 
@@ -271,15 +283,15 @@ open class D2Exporter : AbstractDiagramExporter() {
         NamedObject.build(relationshipView.relationshipNameInView(view)) {
             animated(relationshipStyle.d2Animated)
             label(relationshipView.d2LabelInView(view))
-            opacity(relationshipStyle.d2Opacity)
-            stroke(relationshipStyle.color)
-            fontSize(relationshipStyle.fontSize)
+            opacity(relationshipStyle.d2Opacity ?: 1.0)
+            stroke(relationshipStyle.color ?: "#707070")
+            strokeWidth(relationshipStyle.thickness ?: 2)
+            fontSize(relationshipStyle.fontSize ?: 24)
             when (relationshipStyle.style) {
-                LineStyle.Dashed -> dashed()
                 LineStyle.Dotted -> dotted()
-                else -> Unit
+                LineStyle.Solid -> Unit
+                LineStyle.Dashed, null -> dashed()
             }
-            strokeWidth(relationshipStyle.thickness)
         }.writeObject(writer)
     }
 
@@ -295,7 +307,7 @@ open class D2Exporter : AbstractDiagramExporter() {
             fillPattern(style.d2FillPattern)
             stroke(style.stroke)
             strokeWidth(style.strokeWidth)
-            opacity(style.d2Opacity)
+            opacity(style.d2Opacity ?: 1.0)
             when (style.border) {
                 Border.Dashed -> dashed()
                 Border.Dotted -> dotted()

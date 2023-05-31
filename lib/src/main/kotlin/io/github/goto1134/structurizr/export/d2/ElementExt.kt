@@ -8,7 +8,7 @@ import io.github.goto1134.structurizr.export.d2.D2Exporter.Companion.STRUCTURIZR
 import io.github.goto1134.structurizr.export.d2.model.D2FillPattern
 import io.github.goto1134.structurizr.export.d2.model.D2Shape
 
-val ElementStyle.d2Opacity get() = opacity.toDouble() / 100
+val ElementStyle.d2Opacity get() = opacity?.toDouble()?.div( 100)
 
 val ElementStyle.d2FillPattern get() = D2FillPattern.get(properties[D2Exporter.D2_FILL_PATTERN])
 
@@ -22,6 +22,7 @@ val ElementStyle.d2Shape
         Shape.Hexagon -> D2Shape.HEXAGON
         Shape.Pipe -> D2Shape.QUEUE
         Shape.Diamond -> D2Shape.DIAMOND
+        null -> null
         else -> D2Shape.RECTANGLE
     }
 
@@ -41,24 +42,30 @@ fun GroupableElement.parentGroupSequenceOrNull(): Sequence<String>? {
     }
 }
 
-data class GroupWithPath(val parent: Element?, val relativePath: String, val name: String) {
+data class GroupWithPath(val parent: Element?, val relativePath: String, val fullGroup: String, val group: String) {
     fun absolutePathInView(view: ModelView) = buildString {
         parent?.absolutePathInView(view)?.let { append(it, ".") }
         append(relativePath)
     }
 }
 
-fun GroupableElement.groupsWithPathsOrNull() =
-    parentGroupSequenceOrNull()?.scan(GroupWithPath(parent, "", "")) { wrapper, groupName ->
+fun GroupableElement.groupsWithPathsOrNull(): Sequence<GroupWithPath>? {
+    val groupSeparator = model.properties[STRUCTURIZR_GROUP_SEPARATOR_PROPERTY_NAME]
+    return parentGroupSequenceOrNull()?.scan(GroupWithPath(parent, "", "", "")) { wrapper, groupName ->
         GroupWithPath(
             parent = parent,
             relativePath = buildString {
                 if (wrapper.relativePath.isNotEmpty()) append(wrapper.relativePath, ".")
                 append("\"group_", groupName, "\"")
             },
-            name = groupName
+            fullGroup = buildString {
+                if (wrapper.fullGroup.isNotEmpty()) append(wrapper.fullGroup, groupSeparator)
+                append(groupName)
+            },
+            group = groupName
         )
     }?.drop(1)
+}
 
 val Element.hasMultipleInstances get() = this is DeploymentNode && "1" != instances
 

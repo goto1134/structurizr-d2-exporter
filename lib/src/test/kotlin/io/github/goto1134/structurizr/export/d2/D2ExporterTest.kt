@@ -75,7 +75,7 @@ internal class D2ExporterTest {
 
     @Test
     fun test_NestedGroupsExample() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("groups-nested.json"))
+        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("groups-nested/groups-nested.json"))
         ThemeUtils.loadThemes(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(1, diagrams.size)

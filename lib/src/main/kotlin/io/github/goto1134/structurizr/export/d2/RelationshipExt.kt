@@ -8,7 +8,7 @@ import io.github.goto1134.structurizr.export.d2.model.D2Connection
 
 val RelationshipStyle.d2Animated get() = properties[D2_CONNECTION_ANIMATED].toBoolean()
 
-val RelationshipStyle.d2Opacity get() = opacity.toDouble() / 100
+val RelationshipStyle.d2Opacity get() = opacity?.toDouble()?.div(100)
 
 val RelationshipView.d2Connection: D2Connection
     get() = if (isResponse == true) D2Connection.REVERSE else D2Connection.DIRECT
