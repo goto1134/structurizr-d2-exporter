@@ -116,8 +116,8 @@ class PropertyBuilder {
         properties.add(D2WrappedStringProperty(D2Keyword.LABEL, label))
     }
 
-    fun shape(shape: D2Shape) = apply {
-        properties.add(D2Property(D2Keyword.SHAPE, shape))
+    fun shape(shape: D2Shape?) = apply {
+        if (shape != null) properties.add(D2Property(D2Keyword.SHAPE, shape))
     }
 
     fun icon(icon: String?) = apply {
@@ -173,8 +173,6 @@ class PropertyBuilder {
     fun opacity(opacity: Double) = apply {
         style.add(D2Property(D2StyleKeyword.OPACITY, opacity))
     }
-
-    fun withGroupStyle() = fill("white").stroke("black")
 
     fun animated(animated: Boolean) = apply {
         if (animated) style.add(D2Property(D2StyleKeyword.CONNECTION_ANIMATED, true))
