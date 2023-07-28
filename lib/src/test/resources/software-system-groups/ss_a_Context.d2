@@ -1,0 +1,101 @@
+title: |`md
+  # System A - System Context
+`| {
+  near: top-center
+}
+"group_Line of Business C": {
+  label: "Line of Business C"
+  shape: rectangle
+  style: {
+    fill: "#577e7d"
+    font-color: "#cccccc"
+    font-size: 24
+    opacity: 1.0
+    stroke: "#cccccc"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+"group_Line of Business B": {
+  label: "Line of Business B"
+  shape: rectangle
+  style: {
+    fill: "#aa8c65"
+    font-color: "#cccccc"
+    font-size: 24
+    opacity: 1.0
+    stroke: "#cccccc"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+"group_Line of Business A": {
+  label: "Line of Business A"
+  shape: rectangle
+  style: {
+    fill: "#b0d4ca"
+    font-color: "#cccccc"
+    font-size: 24
+    opacity: 1.0
+    stroke: "#cccccc"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+"group_Line of Business C".container_1: {
+  label: "System C\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+"group_Line of Business B".container_2: {
+  label: "System B\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+"group_Line of Business A".container_3: {
+  label: "System A\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+
+"group_Line of Business A".container_3 -> "group_Line of Business B".container_2: {
+  label: "Uses\n[HTTP]"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+"group_Line of Business A".container_3 -> "group_Line of Business C".container_1: {
+  label: "Uses\n[HTTP]"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}

@@ -1,5 +1,6 @@
 package io.github.goto1134.structurizr.export.d2
 
+import com.structurizr.model.Container
 import com.structurizr.model.DeploymentNode
 import com.structurizr.model.Element
 import com.structurizr.model.GroupableElement
@@ -69,11 +70,11 @@ fun GroupableElement.groupsWithPathsOrNull(): Sequence<GroupWithPath>? {
 
 val Element.hasMultipleInstances get() = this is DeploymentNode && "1" != instances
 
-fun Element.inViewNotRoot(view: ModelView) = view.isElementInView(this)
+fun Element.inViewNotRoot(view: ModelView) = (view !is ContainerView || this is Container) && view.isElementInView(this)
 
 fun Element.inViewOrRoot(view: ModelView): Boolean {
-    return view is ComponentView && equals(view.container)
-            || view is ContainerView && equals(view.softwareSystem)
+    return view is ComponentView &&  equals(view.container)
+            || view is ContainerView && (this !is Container || equals(view.softwareSystem))
             || view is DynamicView && equals(view.element)
             || inViewNotRoot(view)
 }

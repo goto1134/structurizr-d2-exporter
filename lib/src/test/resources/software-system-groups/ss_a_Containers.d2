@@ -1,0 +1,74 @@
+title: |`md
+  # System A - Containers
+`| {
+  near: top-center
+}
+container_1: {
+  label: "System C\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+container_2: {
+  label: "System B\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+
+container_3: {
+  label: "System A\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+container_3.container_4: {
+  label: "Container A1\n[Container]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+container_3.container_4 -> container_2: {
+  label: "Uses\n[HTTP]"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_3.container_4 -> container_1: {
+  label: "Uses\n[HTTP]"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}

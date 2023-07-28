@@ -108,4 +108,13 @@ internal class D2ExporterTest {
         assertEquals(1, diagrams.size)
         assertAllDiagramsMatch("fill-pattern", diagrams)
     }
+
+    @Test
+    fun test_SoftwareSystemGroups() {
+        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("software-system-groups/workspace.json"))
+        ThemeUtils.loadThemes(workspace)
+        val diagrams = D2Exporter().export(workspace)
+        assertEquals(2, diagrams.size)
+        assertAllDiagramsMatch("software-system-groups", diagrams)
+    }
 }
