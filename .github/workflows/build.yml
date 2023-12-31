@@ -9,7 +9,7 @@ on:
     types: [ created ]
 
 jobs:
-  build:
+  test:
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
           arguments: build
   publish:
     needs:
-      - build
+      - test
     if: contains(fromJSON('["push", "release"]'), github.event_name)
     permissions:
       contents: read
@@ -53,7 +53,7 @@ jobs:
           ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.OSSRH_TOKEN }}
   dependencies:
     needs:
-      - build
+      - test
     if: contains(fromJSON('["push", "release"]'), github.event_name)
     permissions:
       contents: write
