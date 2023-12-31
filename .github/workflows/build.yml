@@ -26,6 +26,8 @@ jobs:
           arguments: build
       - name: Gradle Dependency Submission
         uses: mikepenz/gradle-dependency-submission@v0.9.1
+        with:
+          gradle-build-module: ":lib"
   publish:
     needs:
       - build
