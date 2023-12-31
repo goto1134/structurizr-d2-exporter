@@ -113,7 +113,7 @@ publishing {
                 developers {
                     developer {
                         id.set("goto1134")
-                        name.set("Andrey Yefanov")
+                        name.set("Andrey Efanov")
                         email.set("1134togo@gmail.com")
                     }
                 }
