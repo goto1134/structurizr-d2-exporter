@@ -10,9 +10,9 @@ fun IndentingWriter.indented(block: IndentingWriter.() -> Unit) {
 }
 
 /**
- * @param <K> – D2 object property name
- * @param <V> - D2 object property value
-</V></K> */
+ * @param K D2 object property name
+ * @param V D2 object property value
+ */
 open class D2Property<K, V>(@JvmField val keyword: K, @JvmField protected val value: V) {
     open fun write(writer: IndentingWriter) = writer.writeLine("$keyword: $value")
 }
