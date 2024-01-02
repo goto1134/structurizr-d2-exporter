@@ -3,6 +3,7 @@ package io.github.goto1134.structurizr.export.d2.model
 /**
  * @see [D2 Style](https://d2lang.com/tour/style)
  */
+@Suppress("unused")
 enum class D2StyleKeyword(private val value: String) {
     FILL_COLOR("fill"),
     FILL_PATTERN("fill-pattern"),

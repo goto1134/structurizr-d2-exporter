@@ -3,6 +3,7 @@ package io.github.goto1134.structurizr.export.d2.model
 /**
  * D2 object keyword
  */
+@Suppress("unused")
 enum class D2Keyword(private val value: String) {
     LABEL("label"),
 

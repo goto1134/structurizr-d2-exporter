@@ -5,6 +5,7 @@ package io.github.goto1134.structurizr.export.d2.model
  *
  * @see [D2 Shapes](https://d2lang.com/tour/shapes/)
  */
+@Suppress("unused")
 enum class D2Shape(private val value: String) {
     RECTANGLE("rectangle"),
     SQUARE("square"),
