@@ -135,7 +135,7 @@ open class D2Exporter : AbstractDiagramExporter() {
     ) {
         if (view is ContainerView) {
             elementsInStep.filterIsInstance<Container>().map { it.softwareSystem }.sortedBy { it.id }.forEach {
-                stepsAnimationState.ifNewElement(it) {
+                stepsAnimationState.addElement(it) {
                     startSoftwareSystemBoundary(view, it, writer)
                 }
             }
@@ -144,13 +144,13 @@ open class D2Exporter : AbstractDiagramExporter() {
             val containers = elementsInStep.filterIsInstance<Component>().map { it.container }.sortedBy { it.id }
             if (view.includeSoftwareSystemBoundaries) {
                 containers.map { it.softwareSystem }.sortedBy { it.id }.forEach {
-                    stepsAnimationState.ifNewElement(it) {
+                    stepsAnimationState.addElement(it) {
                         startSoftwareSystemBoundary(view, it, writer)
                     }
                 }
             }
             containers.forEach {
-                stepsAnimationState.ifNewElement(it) {
+                stepsAnimationState.addElement(it) {
                     startContainerBoundary(view, it, writer)
                 }
             }
@@ -166,7 +166,7 @@ open class D2Exporter : AbstractDiagramExporter() {
         element: GroupableElement,
         stepsAnimationState: StepsAnimationState
     ) {
-        stepsAnimationState.ifNewElement(element) {
+        stepsAnimationState.addElement(element) {
             writeElement(view, element, writer)
         }
         element.groupsWithPathsOrNull()
@@ -333,11 +333,10 @@ open class D2Exporter : AbstractDiagramExporter() {
         private val metElements: MutableSet<String> = mutableSetOf()
         private val metGroups: MutableSet<GroupWithPath> = mutableSetOf()
 
-        fun addElement(element: Element): Boolean = metElements.add(element.id)
         fun addGroup(group: GroupWithPath): Boolean = metGroups.add(group)
 
-        fun ifNewElement(element: Element, block: () -> Unit) {
-            if (addElement(element)) block()
+        fun addElement(element: Element, onNew: () -> Unit) {
+            if (metElements.add(element.id)) onNew()
         }
     }
 }
