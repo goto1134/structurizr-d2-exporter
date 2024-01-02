@@ -1,5 +1,10 @@
 # Structurizr D2 Exporter
 
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/goto1134/structurizr-d2-exporter/badge)](https://securityscorecards.dev/viewer/?uri=github.com/goto1134/structurizr-d2-exporter)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8243/badge)](https://www.bestpractices.dev/projects/8243)
+[![CodeQL](https://github.com/goto1134/structurizr-d2-exporter/actions/workflows/codeql.yml/badge.svg?branch=main&event=push)](https://github.com/goto1134/structurizr-d2-exporter/actions/workflows/codeql.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.goto1134/structurizr-d2-exporter.svg)](https://search.maven.org/artifact/io.github.goto1134/structurizr-d2-exporter)
+
 The [D2Exporter](/lib/src/main/kotlin/io/github/goto1134/structurizr/export/d2/D2Exporter.kt) class provides a way
 to export Structurizr views to diagram definitions that are compatible with [D2](https://d2lang.com).
 
