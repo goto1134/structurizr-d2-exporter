@@ -5,6 +5,7 @@ package io.github.goto1134.structurizr.export.d2.model
  *
  * @see [D2 Connections](https://d2lang.com/tour/connections/)
  */
+@Suppress("unused")
 enum class D2Connection(private val value: String) {
     WITHOUT_DIRECTION("--"),
     DIRECT("->"),
