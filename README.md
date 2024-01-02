@@ -12,12 +12,13 @@ and is available on Maven Central, for inclusion in your own Java applications:
 ![amazon.png](examples/amazon.png)
 
 # Table of Content
-<!-- TOC -->
+* [Structurizr D2 Exporter](#structurizr-d2-exporter)
+* [Table of Content](#table-of-content)
 * [Customization](#customization)
-  * [`d2.title_position`](#d2titleposition)
+  * [`d2.title_position`](#d2title_position)
   * [`d2.animation`](#d2animation)
   * [`d2.animated`](#d2animated)
-  * [`d2.fill_pattern`](#d2fillpattern)
+  * [`d2.fill_pattern`](#d2fill_pattern)
 <!-- TOC -->
 
 
