@@ -18,10 +18,6 @@ gitVersioning.apply {
         tag("v(?<version>.*)") {
             version = "\${ref.version}"
         }
-        branch("main") {
-            describeTagPattern = "v(?<version>.*)"
-            version = "\${describe.tag.version}+\${describe.distance}.\${commit.short}-SNAPSHOT"
-        }
     }
 }
 
