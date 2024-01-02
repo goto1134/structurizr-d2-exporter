@@ -81,7 +81,7 @@ open class D2Exporter : AbstractDiagramExporter() {
         return animations.isNotEmpty() && animationType == AnimationType.D2
     }
 
-    protected fun exportD2Steps(view: ModelView, animations: List<Animation>): Diagram {
+    private fun exportD2Steps(view: ModelView, animations: List<Animation>): Diagram {
         val writer = IndentingWriter()
         writeHeader(view, writer)
         NamedObject.build("steps").writeObject(writer) {
@@ -224,7 +224,7 @@ open class D2Exporter : AbstractDiagramExporter() {
         endDeploymentNodeBoundary(view, writer)
     }
 
-    protected fun writeGroup(view: ModelView, groupWithPath: GroupWithPath, writer: IndentingWriter) {
+    private fun writeGroup(view: ModelView, groupWithPath: GroupWithPath, writer: IndentingWriter) {
         val allGroupsStyle = view.viewSet.configuration.styles.findElementStyle("Group")
         val currentGroupStyle = view.viewSet.configuration.styles.findElementStyle("Group:${groupWithPath.fullGroup}")
         NamedObject.build(groupWithPath.absolutePathInView(view)) {

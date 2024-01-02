@@ -154,6 +154,7 @@ class PropertyBuilder {
 
     fun dashed() = strokeDash(STROKE_DASHED)
     fun dotted() = strokeDash(STROKE_DOTTED)
+    @Suppress("MemberVisibilityCanBePrivate")
     fun strokeDash(dash: Int) = apply {
         style.add(D2Property(D2StyleKeyword.STROKE_DASH, dash))
     }
