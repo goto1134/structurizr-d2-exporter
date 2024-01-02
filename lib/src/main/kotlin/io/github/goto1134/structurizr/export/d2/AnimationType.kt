@@ -6,7 +6,7 @@ enum class AnimationType {
     FRAMES;
 
     companion object {
-        fun get(value: String?) = AnimationType.values().firstOrNull {
+        fun get(value: String?) = entries.firstOrNull {
             it.name.equals(value, ignoreCase = true)
         }
 

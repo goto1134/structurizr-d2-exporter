@@ -13,6 +13,6 @@ enum class D2FillPattern(private val value: String) {
     override fun toString() = value
 
     companion object {
-        fun get(value: String?) = D2FillPattern.values().firstOrNull { it.value.equals(value, ignoreCase = true) }
+        fun get(value: String?) = entries.firstOrNull { it.value.equals(value, ignoreCase = true) }
     }
 }

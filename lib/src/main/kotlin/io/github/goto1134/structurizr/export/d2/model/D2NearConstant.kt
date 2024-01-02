@@ -18,7 +18,7 @@ enum class D2NearConstant(private val value: String) {
     override fun toString() = value
 
     companion object {
-        fun get(value: String?) = values().firstOrNull { it.value.equals(value, ignoreCase = true) }
+        fun get(value: String?) = entries.firstOrNull { it.value.equals(value, ignoreCase = true) }
         fun getOrDefault(value: String?, default: D2NearConstant) = get(value) ?: default
     }
 }
