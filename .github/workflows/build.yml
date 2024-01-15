@@ -87,6 +87,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Submit dependencies
-        uses: mikepenz/gradle-dependency-submission@03725509c6bfb27fc9c924fbe5d38a7d3c82e1b5 # v0.9.1
+        uses: mikepenz/gradle-dependency-submission@e39d996cbb20c65ff32b7129c0e2be9caefa8f7a # v1
         with:
           gradle-build-module: ":lib"
