@@ -9,7 +9,7 @@ dependencyResolutionManagement {
             plugin("kotlin", "org.jetbrains.kotlin.jvm").version("1.9.23")
             plugin("dokka", "org.jetbrains.dokka").version("1.9.20")
             library("structurizr-export", "com.structurizr", "structurizr-export").version("2.1.1")
-            library("structurizr-client", "com.structurizr", "structurizr-client").version("2.1.1")
+            library("structurizr-dsl", "com.structurizr", "structurizr-dsl").version("2.1.1")
             library("junit-jupyter", "org.junit.jupiter", "junit-jupiter").version("5.10.2")
         }
     }

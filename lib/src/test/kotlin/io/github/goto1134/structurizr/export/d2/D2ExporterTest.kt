@@ -1,13 +1,14 @@
 package io.github.goto1134.structurizr.export.d2
 
 import com.structurizr.Workspace
+import com.structurizr.dsl.StructurizrDslParser
 import com.structurizr.export.Diagram
-import com.structurizr.util.WorkspaceUtils
 import com.structurizr.view.ThemeUtils
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import java.io.File
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 
 internal class D2ExporterTest {
@@ -30,91 +31,99 @@ internal class D2ExporterTest {
 
     @Test
     fun test_BigBankPlcExample() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("bank.json"))
+        val workspace = parseWorkspace(testFile("bank/workspace.dsl"))
         useFramesAnimation(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(7, diagrams.size)
-        assertAllDiagramsMatch("bank", diagrams)
+        assertAllDiagramsMatch("bank/default", diagrams)
     }
 
     @Test
     fun test_Animated_BigBankPlcExample() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("bank.json"))
+        val workspace = parseWorkspace(testFile("bank/workspace.dsl"))
         val diagrams = D2Exporter().export(workspace).filterNot { it.key == "SignIn" }
         assertEquals(6, diagrams.size)
-        assertAllDiagramsMatch("bank-animated", diagrams)
+        assertAllDiagramsMatch("bank/animated", diagrams)
     }
 
     @Test
     fun test_AmazonWebServicesExample() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("amazon.json"))
+        val workspace = parseWorkspace(testFile("amazon/workspace.dsl"))
         ThemeUtils.loadThemes(workspace)
         useFramesAnimation(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(1, diagrams.size)
-        assertEquals(testFileText("amazon/AmazonWebServicesDeployment.d2"), diagrams.first().definition)
+        assertEquals(testFileText("amazon/default/AmazonWebServicesDeployment.d2"), diagrams.first().definition)
     }
 
     @Test
     fun test_Animated_AmazonWebServicesExample() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("amazon.json"))
+        val workspace = parseWorkspace(testFile("amazon/workspace.dsl"))
         ThemeUtils.loadThemes(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(1, diagrams.size)
-        assertEquals(testFileText("amazon-animated/AmazonWebServicesDeployment.d2"), diagrams.first().definition)
+        assertEquals(testFileText("amazon/animated/AmazonWebServicesDeployment.d2"), diagrams.first().definition)
     }
 
     @Test
     fun test_GroupsExample() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("groups.json"))
+        val workspace = parseWorkspace(testFile("groups/workspace.dsl"))
         ThemeUtils.loadThemes(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(3, diagrams.size)
-        assertAllDiagramsMatch("groups", diagrams)
+        assertAllDiagramsMatch("groups/default", diagrams)
     }
 
     @Test
     fun test_NestedGroupsExample() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("groups-nested/groups-nested.json"))
+        val workspace = parseWorkspace(testFile("groups-nested/workspace.dsl"))
         ThemeUtils.loadThemes(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(1, diagrams.size)
-        assertAllDiagramsMatch("groups-nested", diagrams)
+        assertAllDiagramsMatch("groups-nested/default", diagrams)
     }
 
     @Test
     fun test_AnimatedRelation() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("animated-relation/workspace.json"))
+        val workspace = parseWorkspace(testFile("relation/workspace.dsl"))
         ThemeUtils.loadThemes(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(1, diagrams.size)
-        assertAllDiagramsMatch("animated-relation", diagrams)
+        assertAllDiagramsMatch("relation/animated", diagrams)
     }
 
     @Test
     fun test_TitlePosition() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("title-position/workspace.json"))
+        val workspace = parseWorkspace(testFile("title-position/workspace.dsl"))
         ThemeUtils.loadThemes(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(3, diagrams.size)
-        assertAllDiagramsMatch("title-position", diagrams)
+        assertAllDiagramsMatch("title-position/default", diagrams)
+    }
+
+    private fun parseWorkspace(testFile: File): Workspace {
+        val parser = StructurizrDslParser()
+        parser.parse(testFile)
+        val workspace = parser.workspace
+        assertNotNull(workspace)
+        return workspace
     }
 
     @Test
     fun test_FillPattern() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("fill-pattern/workspace.json"))
+        val workspace = parseWorkspace(testFile("fill-pattern/workspace.dsl"))
         ThemeUtils.loadThemes(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(1, diagrams.size)
-        assertAllDiagramsMatch("fill-pattern", diagrams)
+        assertAllDiagramsMatch("fill-pattern/default", diagrams)
     }
 
     @Test
     fun test_SoftwareSystemGroups() {
-        val workspace = WorkspaceUtils.loadWorkspaceFromJson(testFile("software-system-groups/workspace.json"))
+        val workspace = parseWorkspace(testFile("software-system-groups/workspace.dsl"))
         ThemeUtils.loadThemes(workspace)
         val diagrams = D2Exporter().export(workspace)
         assertEquals(2, diagrams.size)
-        assertAllDiagramsMatch("software-system-groups", diagrams)
+        assertAllDiagramsMatch("software-system-groups/default", diagrams)
     }
 }

@@ -1,0 +1,202 @@
+title: |`md
+  # Internet Banking System - Deployment - Development
+`| {
+  near: top-center
+}
+direction: down
+container_50: {
+  label: "Developer Laptop\n[Deployment Node: Microsoft Windows 10 or Apple macOS]"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#888888"
+  }
+}
+container_50.container_51: {
+  label: "Web Browser\n[Deployment Node: Chrome, Firefox, Safari, or Edge]"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#888888"
+  }
+}
+container_50.container_51.container_52: {
+  label: "Single-Page Application"
+  shape: rectangle
+  style: {
+    fill: "#438dd5"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#2e6295"
+  }
+}
+container_50.container_53: {
+  label: "Docker Container - Web Server\n[Deployment Node: Docker]"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#888888"
+  }
+}
+container_50.container_53.container_54: {
+  label: "Apache Tomcat\n[Deployment Node: Apache Tomcat 8.x]"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#888888"
+  }
+}
+container_50.container_53.container_54.container_55: {
+  label: "Web Application"
+  shape: rectangle
+  style: {
+    fill: "#438dd5"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#2e6295"
+  }
+}
+container_50.container_53.container_54.container_57: {
+  label: "API Application"
+  shape: rectangle
+  style: {
+    fill: "#438dd5"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#2e6295"
+  }
+}
+container_50.container_59: {
+  label: "Docker Container - Database Server\n[Deployment Node: Docker]"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#888888"
+  }
+}
+container_50.container_59.container_60: {
+  label: "Database Server\n[Deployment Node: Oracle 12c]"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#888888"
+  }
+}
+container_50.container_59.container_60.container_61: {
+  label: "Database"
+  shape: cylinder
+  style: {
+    fill: "#438dd5"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#2e6295"
+  }
+}
+container_63: {
+  label: "Big Bank plc\n[Deployment Node: Big Bank plc data center]"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#888888"
+  }
+}
+container_63.container_64: {
+  label: "bigbank-dev001\n[Deployment Node]"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#888888"
+  }
+}
+container_63.container_64.container_65: {
+  label: "Mainframe Banking System"
+  shape: rectangle
+  style: {
+    fill: "#999999"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#6b6b6b"
+  }
+}
+container_50.container_53.container_54.container_55 -> container_50.container_51.container_52: {
+  label: "Delivers to the customer's web browser"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_50.container_51.container_52 -> container_50.container_53.container_54.container_57: {
+  label: "Makes API calls to\n[JSON/HTTPS]"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_50.container_53.container_54.container_57 -> container_50.container_59.container_60.container_61: {
+  label: "Reads from and writes to\n[SQL/TCP]"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_50.container_53.container_54.container_57 -> container_63.container_64.container_65: {
+  label: "Makes API calls to\n[XML/HTTPS]"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}

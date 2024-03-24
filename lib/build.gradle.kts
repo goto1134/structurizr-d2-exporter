@@ -29,7 +29,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(libs.structurizr.export)
-    testImplementation(libs.structurizr.client)
+    testImplementation(libs.structurizr.dsl)
     testImplementation(libs.junit.jupyter)
     testImplementation(kotlin("test-junit5"))
 }

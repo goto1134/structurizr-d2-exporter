@@ -1,0 +1,124 @@
+title: |`md
+  # System Landscape
+`| {
+  near: top-center
+}
+direction: down
+"group_Group 1": {
+  label: "Group 1"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#cccccc"
+    font-size: 24
+    opacity: 1.0
+    stroke: "#cccccc"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+"group_Enterprise": {
+  label: "Enterprise"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#cccccc"
+    font-size: 24
+    opacity: 1.0
+    stroke: "#cccccc"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+"group_Enterprise"."group_Group 2": {
+  label: "Group 2"
+  shape: rectangle
+  style: {
+    fill: "#ffffff"
+    font-color: "#cccccc"
+    font-size: 24
+    opacity: 1.0
+    stroke: "#cccccc"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_1: {
+  label: "A\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+"group_Group 1".container_2: {
+  label: "B\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+"group_Enterprise".container_3: {
+  label: "C\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+"group_Enterprise"."group_Group 2".container_4: {
+  label: "D\n[Software System]"
+  shape: rectangle
+  style: {
+    fill: "#dddddd"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#9a9a9a"
+  }
+}
+
+"group_Group 1".container_2 -> "group_Enterprise".container_3: {
+  label: ""
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+"group_Enterprise".container_3 -> "group_Enterprise"."group_Group 2".container_4: {
+  label: ""
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_1 -> "group_Group 1".container_2: {
+  label: ""
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
