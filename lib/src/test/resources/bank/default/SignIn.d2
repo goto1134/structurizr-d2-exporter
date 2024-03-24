@@ -1,0 +1,132 @@
+title: |`md
+  # API Application - Dynamic
+`| {
+  near: top-center
+}
+direction: down
+container_11: {
+  label: "API Application\n[Container: Java and Spring MVC]"
+  shape: rectangle
+  tooltip: "Provides Internet banking functionality via a JSON/HTTPS API."
+  style: {
+    fill: "#438dd5"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#2e6295"
+  }
+}
+container_11.container_12: {
+  label: "Sign In Controller\n[Component: Spring MVC Rest Controller]"
+  shape: rectangle
+  tooltip: "Allows users to sign in to the Internet Banking System."
+  style: {
+    fill: "#85bbf0"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#5d82a8"
+  }
+}
+container_11.container_15: {
+  label: "Security Component\n[Component: Spring Bean]"
+  shape: rectangle
+  tooltip: "Provides functionality related to signing in, changing passwords, etc."
+  style: {
+    fill: "#85bbf0"
+    font-color: "#000000"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#5d82a8"
+  }
+}
+container_8: {
+  label: "Single-Page Application\n[Container: JavaScript and Angular]"
+  shape: rectangle
+  tooltip: "Provides all of the Internet banking functionality to customers via their web browser."
+  style: {
+    fill: "#438dd5"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#2e6295"
+  }
+}
+container_18: {
+  label: "Database\n[Container: Oracle Database Schema]"
+  shape: cylinder
+  tooltip: "Stores user registration information, hashed authentication credentials, access logs, etc."
+  style: {
+    fill: "#438dd5"
+    font-color: "#ffffff"
+    font-size: 24
+    multiple: false
+    opacity: 1.0
+    stroke: "#2e6295"
+  }
+}
+
+container_8 -> container_11.container_12: {
+  label: "1 – Submits credentials to"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_11.container_12 -> container_11.container_15: {
+  label: "2 – Validates credentials using"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_11.container_15 -> container_18: {
+  label: "3 – select * from users where username = ?"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_11.container_15 <- container_18: {
+  label: "4 – Returns user data to"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_11.container_12 <- container_11.container_15: {
+  label: "5 – Returns true if the hashed password matches"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}
+container_8 <- container_11.container_12: {
+  label: "6 – Sends back an authentication token to"
+  style: {
+    font-size: 24
+    opacity: 1.0
+    stroke: "#707070"
+    stroke-dash: 5
+    stroke-width: 2
+  }
+}

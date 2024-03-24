@@ -1,0 +1,299 @@
+title: |`md
+  # Internet Banking System - Deployment - Live
+`| {
+  near: top-center
+}
+direction: down
+steps: {
+  1: {
+    container_69: {
+      label: "Customer's computer\n[Deployment Node: Microsoft Windows or Apple macOS]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_69.container_70: {
+      label: "Web Browser\n[Deployment Node: Chrome, Firefox, Safari, or Edge]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_69.container_70.container_71: {
+      label: "Single-Page Application"
+      shape: rectangle
+      style: {
+        fill: "#438dd5"
+        font-color: "#ffffff"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#2e6295"
+      }
+    }
+
+  }
+  2: {
+    container_67: {
+      label: "Customer's mobile device\n[Deployment Node: Apple iOS or Android]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_67.container_68: {
+      label: "Mobile App"
+      shape: rectangle
+      style: {
+        fill: "#438dd5"
+        font-color: "#ffffff"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#2e6295"
+      }
+    }
+
+  }
+  3: {
+    container_72: {
+      label: "Big Bank plc\n[Deployment Node: Big Bank plc data center]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_72.container_73: {
+      label: "bigbank-web***\n[Deployment Node: Ubuntu 16.04 LTS]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: true
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_72.container_73.container_74: {
+      label: "Apache Tomcat\n[Deployment Node: Apache Tomcat 8.x]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_72.container_73.container_74.container_75: {
+      label: "Web Application"
+      shape: rectangle
+      style: {
+        fill: "#438dd5"
+        font-color: "#ffffff"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#2e6295"
+      }
+    }
+    container_72.container_77: {
+      label: "bigbank-api***\n[Deployment Node: Ubuntu 16.04 LTS]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: true
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_72.container_77.container_78: {
+      label: "Apache Tomcat\n[Deployment Node: Apache Tomcat 8.x]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_72.container_77.container_78.container_79: {
+      label: "API Application"
+      shape: rectangle
+      style: {
+        fill: "#438dd5"
+        font-color: "#ffffff"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#2e6295"
+      }
+    }
+
+    container_72.container_73.container_74.container_75 -> container_69.container_70.container_71: {
+      label: "Delivers to the customer's web browser"
+      style: {
+        font-size: 24
+        opacity: 1.0
+        stroke: "#707070"
+        stroke-dash: 5
+        stroke-width: 2
+      }
+    }
+    container_67.container_68 -> container_72.container_77.container_78.container_79: {
+      label: "Makes API calls to\n[JSON/HTTPS]"
+      style: {
+        font-size: 24
+        opacity: 1.0
+        stroke: "#707070"
+        stroke-dash: 5
+        stroke-width: 2
+      }
+    }
+    container_69.container_70.container_71 -> container_72.container_77.container_78.container_79: {
+      label: "Makes API calls to\n[JSON/HTTPS]"
+      style: {
+        font-size: 24
+        opacity: 1.0
+        stroke: "#707070"
+        stroke-dash: 5
+        stroke-width: 2
+      }
+    }
+  }
+  4: {
+    container_72.container_82: {
+      label: "bigbank-db01\n[Deployment Node: Ubuntu 16.04 LTS]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_72.container_82.container_83: {
+      label: "Oracle - Primary\n[Deployment Node: Oracle 12c]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#888888"
+      }
+    }
+    container_72.container_82.container_83.container_84: {
+      label: "Database"
+      shape: cylinder
+      style: {
+        fill: "#438dd5"
+        font-color: "#ffffff"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#2e6295"
+      }
+    }
+
+    container_72.container_77.container_78.container_79 -> container_72.container_82.container_83.container_84: {
+      label: "Reads from and writes to\n[SQL/TCP]"
+      style: {
+        font-size: 24
+        opacity: 1.0
+        stroke: "#707070"
+        stroke-dash: 5
+        stroke-width: 2
+      }
+    }
+  }
+  5: {
+    container_72.container_86: {
+      label: "bigbank-db02\n[Deployment Node: Ubuntu 16.04 LTS]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 0.25
+        stroke: "#888888"
+      }
+    }
+    container_72.container_86.container_87: {
+      label: "Oracle - Secondary\n[Deployment Node: Oracle 12c]"
+      shape: rectangle
+      style: {
+        fill: "#ffffff"
+        font-color: "#000000"
+        font-size: 24
+        multiple: false
+        opacity: 0.25
+        stroke: "#888888"
+      }
+    }
+    container_72.container_86.container_87.container_88: {
+      label: "Database"
+      shape: cylinder
+      style: {
+        fill: "#438dd5"
+        font-color: "#ffffff"
+        font-size: 24
+        multiple: false
+        opacity: 1.0
+        stroke: "#2e6295"
+      }
+    }
+
+    container_72.container_77.container_78.container_79 -> container_72.container_86.container_87.container_88: {
+      label: "Reads from and writes to\n[SQL/TCP]"
+      style: {
+        font-size: 24
+        opacity: 1.0
+        stroke: "#707070"
+        stroke-dash: 5
+        stroke-width: 2
+      }
+    }
+    container_72.container_82.container_83 -> container_72.container_86.container_87: {
+      label: "Replicates data to"
+      style: {
+        font-size: 24
+        opacity: 1.0
+        stroke: "#707070"
+        stroke-dash: 5
+        stroke-width: 2
+      }
+    }
+  }
+}
