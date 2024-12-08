@@ -10,7 +10,7 @@ dependencyResolutionManagement {
             plugin("dokka", "org.jetbrains.dokka").version("1.9.20")
             library("structurizr-export", "com.structurizr", "structurizr-export").version("3.2.0")
             library("structurizr-dsl", "com.structurizr", "structurizr-dsl").version("3.2.0")
-            library("junit-jupyter", "org.junit.jupiter", "junit-jupiter").version("5.10.2")
+            library("junit-jupyter", "org.junit.jupiter", "junit-jupiter").version("5.11.3")
         }
     }
 }
