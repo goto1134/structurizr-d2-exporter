@@ -91,7 +91,7 @@ Source: [fill-pattern/workspace.dsl](lib/src/test/resources/fill-pattern/workspa
 
 ![fill-pattern.png](examples/fill-pattern.png)
 
-## `d2.useC4Person` (experimental)
+## `d2.use_c4_person` (experimental)
 
 * Entity: [`views`, `view`](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#views)
 * Values: `true`, `false`
