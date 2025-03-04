@@ -11,6 +11,9 @@ import io.github.goto1134.structurizr.export.d2.model.D2NearConstant.TOP_CENTER
 
 fun View.getViewOrViewSetProperty(key: String) = properties.getOrElse(key) { viewSet.configuration.properties[key] }
 
+val View.d2UseC4Person: Boolean
+    get() = getViewOrViewSetProperty(D2Exporter.D2_USE_C4_PERSON).toBoolean()
+
 val View.d2Title: String
     get() = title?.takeUnless(String::isBlank) ?: name
 

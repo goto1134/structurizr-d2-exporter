@@ -19,6 +19,7 @@ enum class D2Shape(private val value: String) {
     CALLOUT("callout"),
     STORED_DATA("stored_data"),
     PERSON("person"),
+    C4_PERSON("c4_person"),
     DIAMOND("diamond"),
     OVAL("oval"),
     CIRCLE("circle"),
