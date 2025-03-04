@@ -90,3 +90,25 @@ When set on an `element` style, adds [fill pattern](https://d2lang.com/tour/styl
 Source: [fill-pattern/workspace.dsl](lib/src/test/resources/fill-pattern/workspace.dsl)
 
 ![fill-pattern.png](examples/fill-pattern.png)
+
+## `d2.useC4Person` (experimental)
+
+* Entity: [`views`, `view`](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#views)
+* Values: `true`, `false`
+* Default: `false`
+
+Uses d2 `c4_person` shape for structurizr `Person` and `Robot`.
+
+**Hint:**
+* Verify if your d2 version supports `c4_person`, see https://github.com/terrastruct/d2/pull/2397.
+* In structurizr `Person` elements' default shape is `Box`. Use a custom style for a `Person` shape:
+```
+  views {
+      styles {
+          # structurizr uses retangle shapes for Person by default
+          element "Person" {
+              shape Person
+          }
+      }
+  }
+```

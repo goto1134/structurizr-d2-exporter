@@ -9,13 +9,14 @@ import io.github.goto1134.structurizr.export.d2.D2Exporter.Companion.STRUCTURIZR
 import io.github.goto1134.structurizr.export.d2.model.D2FillPattern
 import io.github.goto1134.structurizr.export.d2.model.D2Shape
 
-val ElementStyle.d2Opacity get() = opacity?.toDouble()?.div( 100)
+val ElementStyle.d2Opacity get() = opacity?.toDouble()?.div(100)
 
 val ElementStyle.d2FillPattern get() = D2FillPattern.get(properties[D2Exporter.D2_FILL_PATTERN])
 
-val ElementStyle.d2Shape
-    get() = when (shape) {
-        Shape.Person, Shape.Robot -> D2Shape.PERSON
+
+fun d2Shape(view: View, style: ElementStyle): D2Shape? {
+    return when (style.shape) {
+        Shape.Person, Shape.Robot -> if (view.d2UseC4Person) D2Shape.C4_PERSON else D2Shape.PERSON
         Shape.Cylinder -> D2Shape.CYLINDER
         Shape.Folder -> D2Shape.PACKAGE
         Shape.Ellipse -> D2Shape.OVAL
@@ -26,6 +27,7 @@ val ElementStyle.d2Shape
         null -> null
         else -> D2Shape.RECTANGLE
     }
+}
 
 val Element.d2Id get() = "container_$id"
 
@@ -73,7 +75,7 @@ val Element.hasMultipleInstances get() = this is DeploymentNode && "1" != instan
 fun Element.inViewNotRoot(view: ModelView) = (view !is ContainerView || this is Container) && view.isElementInView(this)
 
 fun Element.inViewOrRoot(view: ModelView): Boolean {
-    return view is ComponentView &&  equals(view.container)
+    return view is ComponentView && equals(view.container)
             || view is ContainerView && (this !is Container || equals(view.softwareSystem))
             || view is DynamicView && equals(view.element)
             || inViewNotRoot(view)

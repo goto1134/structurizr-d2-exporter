@@ -13,6 +13,7 @@ import io.github.goto1134.structurizr.export.d2.model.TextObject
 open class D2Exporter : AbstractDiagramExporter() {
 
     companion object {
+        const val D2_USE_C4_PERSON = "d2.use_c4_person"
         const val D2_TITLE_POSITION = "d2.title_position"
         const val D2_ANIMATION = "d2.animation"
         const val D2_CONNECTION_ANIMATED = "d2.animated"
@@ -229,7 +230,7 @@ open class D2Exporter : AbstractDiagramExporter() {
         val currentGroupStyle = view.viewSet.configuration.styles.findElementStyle("Group:${groupWithPath.fullGroup}")
         NamedObject.build(groupWithPath.absolutePathInView(view)) {
             label(groupWithPath.group)
-            shape(currentGroupStyle?.d2Shape ?: allGroupsStyle?.d2Shape ?: D2Shape.RECTANGLE)
+            shape(currentGroupStyle?.let { d2Shape(view, it) } ?: allGroupsStyle?.let { d2Shape(view, it) } ?: D2Shape.RECTANGLE)
             icon(currentGroupStyle?.icon ?: allGroupsStyle?.icon)
             stroke(currentGroupStyle?.stroke ?: currentGroupStyle?.stroke ?: "#cccccc")
             strokeWidth(currentGroupStyle?.strokeWidth ?: allGroupsStyle?.strokeWidth ?: 2)
@@ -299,7 +300,7 @@ open class D2Exporter : AbstractDiagramExporter() {
         val style = findElementStyle(view, this)
         NamedObject.build(absolutePathInView(view)) {
             label(d2Label(view))
-            shape(style.d2Shape)
+            shape(d2Shape(view, style))
             icon(style.icon)
             link(url)
             tooltip(description)

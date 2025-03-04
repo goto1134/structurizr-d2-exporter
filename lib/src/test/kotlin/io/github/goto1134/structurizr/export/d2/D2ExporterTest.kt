@@ -126,4 +126,22 @@ internal class D2ExporterTest {
         assertEquals(2, diagrams.size)
         assertAllDiagramsMatch("software-system-groups/default", diagrams)
     }
+
+    @Test
+    fun test_C4Person() {
+        val workspace = parseWorkspace(testFile("c4-person/workspace.dsl"))
+        ThemeUtils.loadThemes(workspace)
+        val diagrams = D2Exporter().export(workspace)
+        assertEquals(2, diagrams.size)
+        assertAllDiagramsMatch("c4-person/default", diagrams)
+    }
+
+    @Test
+    fun test_C4PersonViewSet() {
+        val workspace = parseWorkspace(testFile("c4-person-view-set/workspace.dsl"))
+        ThemeUtils.loadThemes(workspace)
+        val diagrams = D2Exporter().export(workspace)
+        assertEquals(2, diagrams.size)
+        assertAllDiagramsMatch("c4-person-view-set/default", diagrams)
+    }
 }
